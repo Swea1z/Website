@@ -89,9 +89,12 @@ body.focus-active iframe{filter:brightness(.22) saturate(.65) blur(1.5px);opacit
 .focus-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap}
 .focus-btn{border:1px solid rgba(255,126,64,.34);background:#111214;color:#fff7eb;padding:11px 16px;border-radius:10px;font-weight:900;cursor:pointer}
 .focus-btn:hover{border-color:#ffc247}
+.focus-btn.codex{border-color:rgba(94,231,255,.48);color:#c9f7ff;background:linear-gradient(180deg,rgba(15,33,38,.96),rgba(8,16,20,.98));box-shadow:0 0 18px rgba(94,231,255,.08)}
+.focus-btn.codex:hover{border-color:#5ee7ff;box-shadow:0 0 24px rgba(94,231,255,.15)}
 .focus-btn.done{color:#170702;border-color:#ffad34;background:linear-gradient(135deg,#ff3b1f,#ff8b2d 58%,#ffc247)}
 .focus-empty{text-align:center;color:#b9ada4;padding:12px 0 4px}
-@media(max-width:720px){.system-clock{display:none}.focus-launch{top:14px;left:14px}.focus-panel{padding:20px}.focus-actions{justify-content:stretch}.focus-btn{flex:1}}
+.handoff-status{min-height:18px;margin-top:12px;text-align:right;color:#72f2c1;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+@media(max-width:720px){.system-clock{display:none}.focus-launch{top:14px;left:14px}.focus-panel{padding:20px}.focus-actions{justify-content:stretch}.focus-btn{flex:1}.handoff-status{text-align:center}}
 </style>
 </head>
 <body>
@@ -112,8 +115,10 @@ body.focus-active iframe{filter:brightness(.22) saturate(.65) blur(1.5px);opacit
     <div class="focus-actions">
       <button id="focusExit" class="focus-btn" type="button">Exit</button>
       <button id="focusSkip" class="focus-btn" type="button">Skip</button>
+      <button id="focusCodex" class="focus-btn codex" type="button">↗ Send to Codex</button>
       <button id="focusDone" class="focus-btn done" type="button">✓ Done</button>
     </div>
+    <div id="focusHandoffStatus" class="handoff-status" aria-live="polite"></div>
   </section>
 </div>
 <div id="boot"><div class="core"><div class="brand">STARK SYSTEMS</div><div class="title">SPRITE PROTOCOL</div><div class="status">INITIALIZING COMMAND SYSTEMS...</div><div class="track"><div class="bar"></div></div><div class="online">SYSTEM ONLINE // WELCOME BACK</div></div></div>
@@ -147,6 +152,8 @@ const focusNotes=document.getElementById('focusNotes');
 const focusDone=document.getElementById('focusDone');
 const focusSkip=document.getElementById('focusSkip');
 const focusExit=document.getElementById('focusExit');
+const focusCodex=document.getElementById('focusCodex');
+const focusHandoffStatus=document.getElementById('focusHandoffStatus');
 let focusTask=null;
 const focusSkipped=new Set();
 
@@ -183,6 +190,8 @@ function showFocusTask(){
   focusEmpty.hidden=!empty;
   focusDone.hidden=empty;
   focusSkip.hidden=empty;
+  focusCodex.hidden=empty;
+  focusHandoffStatus.textContent='';
   if(empty)return;
 
   focusTitle.textContent=focusTask.title;
@@ -194,6 +203,23 @@ function showFocusTask(){
     focusMeta.appendChild(pill);
   });
   focusNotes.textContent=focusTask.notes||'No notes for this task.';
+}
+
+function buildCodexPrompt(task){
+  return `You are working inside my existing Sprite UEFN project. Implement the following project-board task now.\n\nTASK\n${task.title}\n\nPRIORITY\n${task.priority.toUpperCase()}\n\nBOARD STATUS\n${task.lane==='doing'?'IN PROGRESS':'NEXT UP'}\n\nCATEGORY\n${task.category}\n\nCONTEXT / NOTES\n${task.notes||'No extra notes were provided.'}\n\nWORKFLOW RULES\n1. Inspect the existing UEFN project, Verse, devices, UI and current implementation before changing anything.\n2. Implement the task rather than only explaining how to do it.\n3. Make the smallest safe change that completes this task and preserve all unrelated working systems.\n4. Reuse existing project patterns and naming where possible. Do not replace or simplify systems that are already working.\n5. If the task depends on something that already exists, verify that implementation first instead of rebuilding it.\n6. Compile/check Verse and perform any practical validation available to you.\n7. When finished, tell me exactly what changed, what I should test inside UEFN, and whether this board task can be marked Done.\n\nThis task came from my Sprite UEFN project board. Focus only on this task unless another change is strictly required for it to work.`;
+}
+
+async function copyCodexPrompt(text){
+  try{
+    await navigator.clipboard.writeText(text);
+    return true;
+  }catch(e){
+    const area=document.createElement('textarea');
+    area.value=text;area.style.position='fixed';area.style.opacity='0';
+    document.body.appendChild(area);area.select();
+    const ok=document.execCommand('copy');area.remove();
+    return ok;
+  }
 }
 
 function enterFocusMode(){
@@ -210,6 +236,7 @@ function exitFocusMode(){
   focusBackdrop.setAttribute('aria-hidden','true');
   focusTask=null;
   focusSkipped.clear();
+  focusHandoffStatus.textContent='';
 }
 
 focusLaunch.addEventListener('click',enterFocusMode);
@@ -218,6 +245,16 @@ focusSkip.addEventListener('click',()=>{
   if(!focusTask)return;
   focusSkipped.add(focusTask.id);
   showFocusTask();
+});
+focusCodex.addEventListener('click',async()=>{
+  if(!focusTask)return;
+  const prompt=buildCodexPrompt(focusTask);
+  window.open('https://chatgpt.com/codex/open-app?app_brand=chatgpt','_blank','noopener,noreferrer');
+  const copied=await copyCodexPrompt(prompt);
+  focusHandoffStatus.textContent=copied?'Codex brief copied — paste it into the Codex task':'Codex opened — copy failed, try again';
+  const old=focusCodex.textContent;
+  focusCodex.textContent=copied?'✓ Brief Copied':'↗ Send to Codex';
+  if(copied)setTimeout(()=>{focusCodex.textContent=old;},1800);
 });
 focusDone.addEventListener('click',()=>{
   if(!focusTask)return;
