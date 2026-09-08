@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sprite UEFN Project Board</title>
+
+<style>
+:root{
+  --bg:#050607;
+  --panel:rgba(13,16,18,.78);
+  --panel2:rgba(18,22,25,.92);
+  --line:rgba(255,102,54,.28);
+  --line2:rgba(255,196,79,.32);
+  --text:#fff7eb;
+  --muted:#b7aaa0;
+  --red:#ff3b1f;
+  --orange:#ff6a2a;
+  --gold:#ffc247;
+  --gold2:#ffe29a;
+  --cyan:#5ee7ff;
+  --green:#58f7b2;
+  --danger:#ff5d75;
+}
+*{box-sizing:border-box}
+html{background:#020304}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(255,67,31,.18),transparent 26%),
+    radial-gradient(circle at 85% 15%,rgba(255,191,55,.10),transparent 22%),
+    linear-gradient(180deg,#080a0c 0%,#030405 55%,#010203 100%);
+  overflow-x:hidden;
+}
+body:before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:32px 32px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.7),transparent 80%);
+}
+body:after{
+  content:"";
+  position:fixed;left:0;right:0;top:-12%;height:14%;
+  background:linear-gradient(180deg,transparent,rgba(255,91,34,.09),transparent);
+  filter:blur(8px);
+  animation:scan 8s linear infinite;
+  pointer-events:none;z-index:0;
+}
+@keyframes scan{to{transform:translateY(900px)}}
+.shell{max-width:1500px;margin:0 auto;padding:30px;position:relative;z-index:1}
+.top{
+  display:flex;gap:20px;align-items:flex-start;justify-content:space-between;
+  margin-bottom:20px;padding:18px 20px;
+  border:1px solid rgba(255,95,39,.25);
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(16,19,22,.82),rgba(8,10,12,.78));
+  box-shadow:inset 0 0 40px rgba(255,84,30,.04),0 0 35px rgba(255,57,31,.05);
+  position:relative;overflow:hidden;
+}
+.top:before,.top:after{
+  content:"";position:absolute;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.4
+}
+.top:before{left:4%;right:55%;top:0}.top:after{left:60%;right:3%;bottom:0}
+.kicker{
+  color:var(--gold);
+  font-weight:900;letter-spacing:.19em;text-transform:uppercase;font-size:11px;
+  text-shadow:0 0 14px rgba(255,194,71,.55)
+}
+h1{
+  font-size:36px;line-height:1.04;margin:8px 0 8px;
+  letter-spacing:-.035em;
+  text-shadow:0 0 20px rgba(255,83,34,.18)
+}
+.sub{color:#b9ada4;max-width:790px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.btn{
+  border:1px solid rgba(255,126,64,.32);
+  background:linear-gradient(180deg,rgba(33,20,17,.92),rgba(13,12,12,.95));
+  color:var(--text);padding:10px 13px;border-radius:10px;font-weight:800;
+  box-shadow:inset 0 0 16px rgba(255,70,31,.04);
+  transition:.18s ease;
+}
+.btn:hover{
+  border-color:rgba(255,194,71,.7);
+  transform:translateY(-1px);
+  box-shadow:0 0 18px rgba(255,83,34,.16),inset 0 0 18px rgba(255,194,71,.04)
+}
+.btn.primary{
+  color:#180702;border:1px solid #ffad34;
+  background:linear-gradient(135deg,#ff3a1f,#ff8b2d 55%,#ffc247);
+  box-shadow:0 0 22px rgba(255,86,34,.25)
+}
+.btn.danger{color:#ffc6cf}
+.stats{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:20px 0
+}
+.stat{
+  background:linear-gradient(180deg,rgba(17,20,23,.88),rgba(8,10,12,.92));
+  border:1px solid rgba(255,107,46,.22);
+  padding:16px;border-radius:14px;position:relative;overflow:hidden;
+  box-shadow:inset 0 0 28px rgba(255,70,31,.025)
+}
+.stat:after{
+  content:"";position:absolute;right:8px;top:8px;width:7px;height:7px;border:1px solid var(--gold);border-radius:50%;
+  box-shadow:0 0 9px rgba(255,194,71,.55)
+}
+.stat b{display:block;font-size:27px;color:#fff5e7}
+.stat span{color:#b09f92;font-size:10px;text-transform:uppercase;letter-spacing:.13em}
+.progress{
+  height:7px;border-radius:99px;background:#211411;overflow:hidden;margin-top:9px;border:1px solid rgba(255,109,47,.15)
+}
+.progress i{
+  display:block;height:100%;
+  background:linear-gradient(90deg,var(--red),var(--orange),var(--gold));
+  width:0;box-shadow:0 0 12px rgba(255,105,42,.5);transition:width .35s ease
+}
+.toolbar{
+  display:grid;grid-template-columns:2fr repeat(3,1fr) auto;gap:9px;
+  background:rgba(8,10,12,.86);border:1px solid rgba(255,104,46,.22);
+  padding:12px;border-radius:14px;position:sticky;top:10px;z-index:10;
+  backdrop-filter:blur(14px);box-shadow:0 10px 32px rgba(0,0,0,.22)
+}
+.field{
+  width:100%;border:1px solid rgba(255,119,55,.22);
+  background:#090b0d;color:var(--text);border-radius:9px;padding:10px 11px;outline:none;
+  transition:.18s ease
+}
+.field:focus{
+  border-color:rgba(255,194,71,.75);
+  box-shadow:0 0 0 2px rgba(255,194,71,.07),0 0 16px rgba(255,82,31,.08)
+}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.col{
+  background:linear-gradient(180deg,rgba(10,12,14,.8),rgba(5,6,7,.88));
+  border:1px solid rgba(255,107,46,.2);
+  border-radius:16px;min-height:360px;overflow:hidden;position:relative
+}
+.col:before{
+  content:"";position:absolute;left:0;top:0;width:100%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--red),var(--gold),transparent);opacity:.55
+}
+.colhead{
+  display:flex;align-items:center;justify-content:space-between;padding:14px 15px;
+  border-bottom:1px solid rgba(255,105,43,.15);font-weight:950;letter-spacing:.02em
+}
+.count{
+  color:var(--gold2);font-size:11px;background:#130d0a;padding:3px 8px;border-radius:99px;
+  border:1px solid rgba(255,194,71,.18)
+}
+.cards{padding:10px;display:flex;flex-direction:column;gap:9px}
+.card{
+  background:
+    linear-gradient(180deg,rgba(24,24,24,.95),rgba(11,12,13,.98));
+  border:1px solid rgba(255,116,53,.18);
+  border-radius:12px;padding:12px;position:relative;overflow:hidden;
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease,opacity .2s ease
+}
+.card:before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:linear-gradient(180deg,var(--red),var(--gold));opacity:.75
+}
+.card:hover{
+  transform:translateY(-1px);
+  border-color:rgba(255,161,68,.38);
+  box-shadow:0 10px 30px rgba(0,0,0,.3),0 0 24px rgba(255,75,30,.06)
+}
+.card.done{opacity:.74}
+.card.done .title{text-decoration:line-through;color:#ae9f94}
+.row{display:flex;align-items:flex-start;gap:9px}
+.check{
+  appearance:none;width:20px;height:20px;border:2px solid #6b5448;border-radius:50%;
+  margin:1px 0 0;flex:0 0 auto;display:grid;place-items:center;position:relative;
+  transition:.2s ease;background:radial-gradient(circle at 50% 50%,rgba(255,84,33,.05),transparent 60%)
+}
+.check:hover{border-color:var(--gold);box-shadow:0 0 14px rgba(255,171,56,.22)}
+.check:checked{
+  background:radial-gradient(circle,var(--gold2) 0%,var(--gold) 22%,var(--orange) 52%,var(--red) 100%);
+  border-color:#ffd36f;
+  box-shadow:0 0 8px #ff8c2e,0 0 20px rgba(255,90,31,.85),0 0 36px rgba(255,190,60,.4);
+  animation:reactorPulse .6s ease
+}
+.check:checked:after{
+  content:"✓";color:#1b0802;font-size:13px;font-weight:1000;text-shadow:none
+}
+@keyframes reactorPulse{
+  0%{transform:scale(.72);filter:brightness(1)}
+  40%{transform:scale(1.28);filter:brightness(1.8)}
+  100%{transform:scale(1);filter:brightness(1)}
+}
+.title{font-weight:850;font-size:14px;flex:1}
+.meta{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0 0 29px}
+.pill{
+  font-size:9px;text-transform:uppercase;letter-spacing:.08em;
+  border:1px solid rgba(255,124,57,.22);color:#cfb8a5;border-radius:99px;padding:3px 7px;
+  background:rgba(255,81,31,.025)
+}
+.pill.high{color:#ffd1c8;border-color:rgba(255,70,45,.42)}
+.pill.medium{color:#ffe6a8;border-color:rgba(255,194,71,.32)}
+.pill.low{color:#bceeff;border-color:rgba(94,231,255,.27)}
+.notes{color:#a99a90;margin:8px 26px 0 29px;font-size:12px;white-space:pre-wrap}
+.cardBtns{position:absolute;right:7px;bottom:7px;display:flex;gap:3px}
+.icon{border:0;background:transparent;color:#7e6f65;padding:4px 5px;border-radius:6px}
+.icon:hover{background:#211511;color:#ffd292}
+.section{
+  margin-top:22px;background:linear-gradient(180deg,rgba(12,14,16,.82),rgba(6,7,8,.9));
+  border:1px solid rgba(255,107,46,.2);border-radius:16px;padding:15px;position:relative;overflow:hidden
+}
+.section:before{
+  content:"";position:absolute;left:0;right:60%;top:0;height:1px;background:linear-gradient(90deg,var(--red),var(--gold),transparent)
+}
+.section h2{font-size:16px;margin:0 0 10px;color:#fff0db}
+.spritegrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.sprite{
+  background:linear-gradient(180deg,#111315,#090a0b);border:1px solid rgba(255,118,54,.18);
+  padding:9px;border-radius:9px;color:#d6c5b6;text-align:center;transition:.18s ease
+}
+.sprite:hover{border-color:rgba(255,194,71,.45);box-shadow:0 0 14px rgba(255,77,31,.05)}
+.modalback{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:50;
+  align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(8px)
+}
+.modalback.open{display:flex}
+.modal{
+  width:min(620px,100%);background:linear-gradient(180deg,#141719,#090b0c);
+  border:1px solid rgba(255,157,67,.35);border-radius:18px;padding:18px;
+  box-shadow:0 25px 100px #000b,0 0 45px rgba(255,68,25,.08)
+}
+.modal h3{margin:0 0 13px;font-size:20px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.formgrid .wide{grid-column:1/-1}
+textarea.field{min-height:110px;resize:vertical}
+.modalactions{display:flex;gap:8px;justify-content:flex-end;margin-top:13px}
+.empty{color:var(--muted);text-align:center;padding:28px 10px}
+.small{font-size:12px;color:#a79588}
+
+/* Completion FX */
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:120;overflow:hidden}
+.fx-ring{
+  position:fixed;width:26px;height:26px;border:2px solid var(--gold);border-radius:50%;
+  transform:translate(-50%,-50%) scale(.2);opacity:1;
+  box-shadow:0 0 10px #ff7d2e,0 0 24px rgba(255,194,71,.7),inset 0 0 10px rgba(255,194,71,.5);
+  animation:ringBurst .72s cubic-bezier(.18,.7,.24,1) forwards
+}
+.fx-ring.r2{animation-delay:.06s;border-color:#ff5a2b}
+@keyframes ringBurst{
+  0%{transform:translate(-50%,-50%) scale(.2);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(5.8);opacity:0}
+}
+.fx-particle{
+  position:fixed;width:5px;height:5px;border-radius:50%;
+  background:linear-gradient(135deg,#fff2b0,#ffc247 50%,#ff4a21);
+  box-shadow:0 0 10px rgba(255,171,48,.9);
+  transform:translate(-50%,-50%);
+  animation:particleFly .78s ease-out forwards
+}
+@keyframes particleFly{
+  0%{opacity:1;transform:translate(-50%,-50%) translate(0,0) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-50%) translate(var(--dx),var(--dy)) scale(.2)}
+}
+.fx-flash{
+  position:fixed;inset:0;
+  background:radial-gradient(circle at var(--x) var(--y),rgba(255,214,120,.18),rgba(255,77,31,.08) 15%,transparent 36%);
+  animation:flashOut .5s ease-out forwards
+}
+@keyframes flashOut{from{opacity:1}to{opacity:0}}
+.complete-toast{
+  position:fixed;left:50%;top:8%;transform:translateX(-50%) translateY(-12px);
+  color:#1b0902;background:linear-gradient(135deg,#ff5625,#ffb43d,#ffe18b);
+  border:1px solid #fff0b2;border-radius:999px;padding:10px 18px;font-weight:950;
+  letter-spacing:.12em;text-transform:uppercase;font-size:11px;
+  box-shadow:0 0 24px rgba(255,92,35,.5),0 10px 30px rgba(0,0,0,.35);
+  animation:toastInOut 1.15s ease forwards;z-index:130
+}
+@keyframes toastInOut{
+  0%{opacity:0;transform:translateX(-50%) translateY(-14px) scale(.9)}
+  18%,72%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
+  100%{opacity:0;transform:translateX(-50%) translateY(-10px) scale(.96)}
+}
+.card.complete-pop{animation:cardComplete .68s ease}
+@keyframes cardComplete{
+  0%{box-shadow:0 0 0 rgba(255,92,35,0);transform:scale(1)}
+  35%{box-shadow:0 0 32px rgba(255,92,35,.28),inset 0 0 30px rgba(255,194,71,.05);transform:scale(1.012)}
+  100%{box-shadow:0 0 0 rgba(255,92,35,0);transform:scale(1)}
+}
+@media(max-width:1000px){
+  .board{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr 1fr}.toolbar .search{grid-column:1/-1}
+  .stats{grid-template-columns:1fr 1fr}.top{flex-direction:column}.actions{justify-content:flex-start}
+}
+@media(max-width:600px){
+  .shell{padding:16px}h1{font-size:28px}.stats{grid-template-columns:1fr 1fr}
+  .toolbar{grid-template-columns:1fr}.toolbar .search{grid-column:auto}.spritegrid{grid-template-columns:repeat(2,1fr)}
+  .formgrid{grid-template-columns:1fr}
+}
+
+/* SYSTEM ONLINE boot sequence */
+#bootSequence{position:fixed;inset:0;z-index:99999;background:radial-gradient(circle at 50% 45%,#2a0c05 0,#090604 38%,#020303 75%);display:flex;align-items:center;justify-content:center;transition:opacity .45s ease,visibility .45s ease}
+#bootSequence.boot-hide{opacity:0;visibility:hidden}
+.boot-core{text-align:center;width:min(680px,86vw);letter-spacing:.12em}.boot-brand{font-size:12px;color:#ffc247;font-weight:900;letter-spacing:.32em;margin-bottom:18px;text-shadow:0 0 16px #ff8b2d}.boot-title{font-size:clamp(28px,5vw,58px);font-weight:1000;color:#fff7eb;text-shadow:0 0 12px #ff3b1f,0 0 32px #ff6a2a;margin-bottom:14px}.boot-status{font-size:12px;color:#ffb35e;margin-bottom:18px}.boot-track{height:4px;background:#24100a;border:1px solid #7a2b16;border-radius:99px;overflow:hidden;box-shadow:0 0 18px #ff3b1f55}.boot-bar{height:100%;width:0;background:linear-gradient(90deg,#ff3b1f,#ff8b2d,#ffc247);box-shadow:0 0 18px #ff8b2d;animation:bootLoad 1.15s cubic-bezier(.2,.8,.2,1) forwards}.boot-online{opacity:0;margin-top:17px;color:#58f7b2;font-weight:950;font-size:13px;text-shadow:0 0 14px #58f7b288;animation:onlineIn .25s ease .95s forwards}@keyframes bootLoad{to{width:100%}}@keyframes onlineIn{to{opacity:1;transform:scale(1.03)}}
+</style>
+
+</head>
+<body><div id="bootSequence"><div class="boot-core"><div class="boot-brand">STARK SYSTEMS // UEFN</div><div class="boot-title">SPRITE PROTOCOL</div><div class="boot-status">INITIALIZING COMMAND SYSTEMS...</div><div class="boot-track"><div class="boot-bar"></div></div><div class="boot-online">SYSTEM ONLINE // WELCOME BACK</div></div></div><div id="fxLayer" class="fx-layer"></div>
+<div class="shell">
+  <div class="top">
+    <div>
+      <div class="kicker">STARK SYSTEMS // UEFN SPRITE PROTOCOL</div>
+      <h1>SPRITE // OPERATIONS BOARD</h1>
+      <div class="sub">Mission control for the Sprite map. Track systems, ship features, generate fresh concepts, and light up the board as each component goes online.</div>
+    </div>
+    <div class="actions">
+      <button class="btn primary" onclick="openAdd()">＋ Add task / idea</button>
+      <button class="btn" onclick="generateIdea()">⚡ Generate Idea</button>
+      <button class="btn" onclick="exportData()">Export JSON</button>
+      <button class="btn" onclick="document.getElementById('importFile').click()">Import JSON</button>
+      <input id="importFile" type="file" accept=".json,application/json" hidden onchange="importData(event)">
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span>Implemented</span><b id="doneN">0</b><div class="progress"><i id="prog"></i></div></div>
+    <div class="stat"><span>In progress</span><b id="doingN">0</b></div>
+    <div class="stat"><span>To build</span><b id="todoN">0</b></div>
+    <div class="stat"><span>Ideas</span><b id="ideaN">0</b></div>
+  </div>
+
+  <div class="toolbar">
+    <input id="search" class="field search" placeholder="Search tasks, notes, Sprites…" oninput="render()">
+    <select id="catFilter" class="field" onchange="render()"><option value="">All categories</option></select>
+    <select id="priorityFilter" class="field" onchange="render()">
+      <option value="">All priorities</option><option>high</option><option>medium</option><option>low</option>
+    </select>
+    <select id="statusFilter" class="field" onchange="render()">
+      <option value="">All statuses</option><option value="done">Implemented</option><option value="doing">In progress</option><option value="todo">To build</option><option value="idea">Ideas</option>
+    </select>
+    <button class="btn" onclick="resetFilters()">Clear</button>
+  </div>
+
+  <div class="board">
+    <section class="col"><div class="colhead">IN DEVELOPMENT <span class="count" id="count-doing"></span></div><div class="cards" id="doing"></div></section>
+    <section class="col"><div class="colhead">QUEUE / CONCEPTS <span class="count" id="count-next"></span></div><div class="cards" id="next"></div></section>
+    <section class="col"><div class="colhead">ONLINE <span class="count" id="count-done"></span></div><div class="cards" id="done"></div></section>
+  </div>
+
+  <div class="section">
+    <h2>SPRITE DATABASE // 25 UNIT ROSTER</h2>
+    <div class="small" style="margin-bottom:10px">All 25 base models were created/imported in the Codex work. Use this as the permanent roster while you refine abilities and variants.</div>
+    <div class="spritegrid" id="spriteGrid"></div>
+  </div>
+
+  <div class="section">
+    <h2>SYSTEM STATUS // CURRENT BUILD</h2>
+    <div class="small">Click-only power • START zone opens selection • 5 visible WIN zones • no WIN power gate for now • on-screen wins • one companion per run • eggs + duplicates • charged Sprite Mode • persistence implemented • full live acceptance testing still required.</div>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;gap:10px;margin:14px 2px;color:#657c95;font-size:11px">
+    <span>Local browser storage key: sprite-uefn-board-v1</span>
+    <button class="icon" onclick="resetSeed()">Reset to original Codex checklist</button>
+  </div>
+</div>
+
+<div id="modalBack" class="modalback" onclick="if(event.target===this)closeModal()">
+ <div class="modal">
+  <h3 id="modalTitle">Add task</h3>
+  <div class="formgrid">
+    <input id="fTitle" class="field wide" placeholder="Task / idea title">
+    <select id="fCategory" class="field"></select>
+    <select id="fStatus" class="field">
+      <option value="todo">To build</option><option value="doing">In progress</option><option value="done">Implemented</option><option value="idea">Idea</option>
+    </select>
+    <select id="fPriority" class="field">
+      <option value="high">High priority</option><option value="medium" selected>Medium priority</option><option value="low">Low priority</option>
+    </select>
+    <input id="fNewCategory" class="field" placeholder="Or type a new category">
+    <textarea id="fNotes" class="field wide" placeholder="Notes, implementation details, next steps…"></textarea>
+  </div>
+  <div class="modalactions">
+    <button class="btn" onclick="closeModal()">Cancel</button>
+    <button class="btn primary" onclick="saveModal()">Save</button>
+  </div>
+ </div>
+</div>
+
+<script>
+const KEY='sprite-uefn-board-v1';
+const SEED=[{"title": "Click-only power gain", "category": "Core Gameplay", "status": "done", "priority": "high", "notes": "Power should only increase from player clicks. Automatic passive power was removed."}, {"title": "Click rate limiter", "category": "Core Gameplay", "status": "done", "priority": "medium", "notes": "Current prototype accepts roughly 11 clicks per second."}, {"title": "Choose Sprite before each run", "category": "Core Gameplay", "status": "done", "priority": "high", "notes": "Player selects a companion before START RUN and the choice stays locked during the run."}, {"title": "Charged Sprite Mode", "category": "Core Gameplay", "status": "done", "priority": "high", "notes": "Clicks charge Sprite Mode to 100. Current prototype transforms for 10 seconds and triples click power."}, {"title": "Decide final Sprite Mode active abilities", "category": "Core Gameplay", "status": "todo", "priority": "high", "notes": "Current Sprite Mode mainly amplifies income/click power. Eventually make transformations feel unique per Sprite."}, {"title": "Build final progression balancing", "category": "Core Gameplay", "status": "todo", "priority": "high", "notes": "Tune click power, wins, egg costs, duplicate bonuses, ability strength and section pacing after the courses exist."}, {"title": "START mutator zone opens Sprite menu", "category": "Map Flow", "status": "done", "priority": "high", "notes": "Menu no longer opens on spawn. Entering START opens selection."}, {"title": "Five visible WIN mutator zones", "category": "Map Flow", "status": "done", "priority": "high", "notes": "Old finish buttons were replaced by visible mutator zones."}, {"title": "Remove power requirement from WIN zones", "category": "Map Flow", "status": "done", "priority": "high", "notes": "Players can claim section wins without a power gate for now."}, {"title": "On-screen win counter", "category": "Map Flow", "status": "done", "priority": "high", "notes": "HUD updates immediately when wins are awarded."}, {"title": "Return teleporter after claiming wins", "category": "Map Flow", "status": "doing", "priority": "high", "notes": "A teleporter was being added to the middle of the baseplate so a WIN zone sends the player back toward spawn. Verify it in-game."}, {"title": "Move WIN zones to final section endpoints", "category": "Map Flow", "status": "todo", "priority": "high", "notes": "Current zone placement is prototype/test placement. Move each one once its section is built."}, {"title": "Build Section 1 course", "category": "Map Flow", "status": "todo", "priority": "high", "notes": ""}, {"title": "Build Section 2 course", "category": "Map Flow", "status": "todo", "priority": "high", "notes": ""}, {"title": "Build Section 3 course", "category": "Map Flow", "status": "todo", "priority": "high", "notes": ""}, {"title": "Build Section 4 course", "category": "Map Flow", "status": "todo", "priority": "high", "notes": ""}, {"title": "Build Section 5 course", "category": "Map Flow", "status": "todo", "priority": "high", "notes": ""}, {"title": "25-Sprite collection system", "category": "Collection & Eggs", "status": "done", "priority": "high", "notes": "X-Ray is the starter. Locked Sprites must be hatched before equipping."}, {"title": "Five egg tiers", "category": "Collection & Eggs", "status": "done", "priority": "high", "notes": "Prototype costs: 2, 6, 14, 30 and 60 wins."}, {"title": "Egg rarity odds", "category": "Collection & Eggs", "status": "done", "priority": "medium", "notes": "Prototype row odds: 40%, 25%, 18%, 12%, 5%."}, {"title": "Duplicate Sprite upgrades", "category": "Collection & Eggs", "status": "done", "priority": "medium", "notes": "Duplicates currently improve click power, capped at 20 copies of bonus."}, {"title": "Finalise Sprite rarity tiers", "category": "Collection & Eggs", "status": "todo", "priority": "high", "notes": "Decide which five Sprites belong in each egg and final rarity names/colours."}, {"title": "Add coloured Sprite variants", "category": "Collection & Eggs", "status": "todo", "priority": "medium", "notes": "Materials were built to allow future colour variants."}, {"title": "Design egg opening presentation", "category": "Collection & Eggs", "status": "todo", "priority": "medium", "notes": "Keep functionality first; later add an exciting hatch animation/reveal."}, {"title": "Import all 25 textured Sprite models", "category": "Sprite Assets", "status": "done", "priority": "high", "notes": "All 25 were imported with editable materials, collision and three LODs."}, {"title": "Sprite material controls", "category": "Sprite Assets", "status": "done", "priority": "medium", "notes": "Editable material instances support future colour/tint changes."}, {"title": "Sprite companion follow presentation", "category": "Sprite Assets", "status": "done", "priority": "high", "notes": "Companions hover beside the player's shoulder and use the existing idle motion."}, {"title": "Idle breathing and sway", "category": "Sprite Assets", "status": "done", "priority": "medium", "notes": "Gentle whole-model procedural idle motion is implemented."}, {"title": "Walking bounce and wobble", "category": "Sprite Assets", "status": "done", "priority": "medium", "notes": "Whole-model procedural walking motion is implemented."}, {"title": "Rig Sprites for proper limb animation", "category": "Sprite Assets", "status": "todo", "priority": "low", "notes": "Current models use whole-body procedural motion; separate leg animation would require rigged models."}, {"title": "Polish Sprite scale/offsets in gameplay", "category": "Sprite Assets", "status": "todo", "priority": "medium", "notes": "Visual tuning still needs live playtesting."}, {"title": "Basic progression ability for all 25 Sprites", "category": "Abilities", "status": "done", "priority": "high", "notes": "Prototype numerical/triggered effects exist for all 25."}, {"title": "X-Ray bespoke reveal targets", "category": "Abilities", "status": "todo", "priority": "medium", "notes": "Current X-Ray effect is a click bonus. Add physical hidden/bonus targets later."}, {"title": "Magnet physical pickup pull", "category": "Abilities", "status": "todo", "priority": "medium", "notes": "Current Magnet effect modifies progression/clicks. Add actual nearby pickup attraction later."}, {"title": "Traversal-focused Sprite abilities", "category": "Abilities", "status": "todo", "priority": "high", "notes": "Create bespoke mechanics that make levels easier/faster rather than relying only on numerical bonuses."}, {"title": "Balance every Sprite so favourites stay useful", "category": "Abilities", "status": "todo", "priority": "high", "notes": "Rarity can improve strength, but each Sprite should keep a unique role."}, {"title": "Document all 25 final abilities", "category": "Abilities", "status": "todo", "priority": "medium", "notes": "Create a clean final ability sheet once the bespoke mechanics are decided."}, {"title": "Functional Sprite selection menu", "category": "UI & UX", "status": "done", "priority": "high", "notes": "Prototype UI is functional; visual polish was intentionally deferred."}, {"title": "Polished main Sprite menu", "category": "UI & UX", "status": "todo", "priority": "medium", "notes": "Redesign after gameplay loop is locked."}, {"title": "Sprite collection / inventory UI", "category": "UI & UX", "status": "todo", "priority": "medium", "notes": "Show owned copies, rarity, equipped Sprite and ability clearly."}, {"title": "Egg shop UI", "category": "UI & UX", "status": "todo", "priority": "medium", "notes": "Give each egg a clear cost, rarity pool and hatch action."}, {"title": "Sprite Mode charge HUD", "category": "UI & UX", "status": "todo", "priority": "medium", "notes": "Make charge state obvious without relying on the prototype text."}, {"title": "Win feedback animation", "category": "UI & UX", "status": "todo", "priority": "low", "notes": "Add satisfying feedback when a player crosses a WIN zone."}, {"title": "Persistent power, wins, equipped Sprite and collection", "category": "Testing & Persistence", "status": "done", "priority": "high", "notes": "Versioned persistence was implemented and saved periodically and on key transactions."}, {"title": "Test rejoin persistence", "category": "Testing & Persistence", "status": "todo", "priority": "high", "notes": "Still requires live acceptance testing and a private playtest link test."}, {"title": "Full in-game WIN zone run-through", "category": "Testing & Persistence", "status": "todo", "priority": "high", "notes": "Compilation passed, but the latest zone setup still needed an in-game run-through."}, {"title": "Verify return teleporter", "category": "Testing & Persistence", "status": "todo", "priority": "high", "notes": "Check every WIN zone awards once, updates HUD and returns the player correctly."}, {"title": "Test all 25 abilities", "category": "Testing & Persistence", "status": "todo", "priority": "high", "notes": "Run through each Sprite and verify its prototype effect works as intended."}, {"title": "Multiplayer isolation test", "category": "Testing & Persistence", "status": "todo", "priority": "high", "notes": "Make sure one player's selection, run, wins, Sprite Mode and companion never affect another player."}, {"title": "Private playtest link test", "category": "Testing & Persistence", "status": "todo", "priority": "high", "notes": "Test persistence and full loop outside editor before publishing."}, {"title": "Performance/memory pass", "category": "Testing & Persistence", "status": "todo", "priority": "medium", "notes": "Check 25 models, materials, UI, Verse systems and later VFX against island memory/performance."}, {"title": "Multiple equipped companions later", "category": "Ideas", "status": "idea", "priority": "low", "notes": "Start with one equipped Sprite; consider multiple companions only after the core loop feels good."}, {"title": "Sprite upgrade/fusion system", "category": "Ideas", "status": "idea", "priority": "low", "notes": "Duplicates could eventually feed upgrades, levels or evolution rather than only raw click bonus."}, {"title": "Rare visual variants / shinies", "category": "Ideas", "status": "idea", "priority": "low", "notes": "Use the editable materials for rare colourways or special hatch variants."}, {"title": "Ability-specific secret routes", "category": "Ideas", "status": "idea", "priority": "medium", "notes": "Some levels could contain shortcuts that become easier or accessible with certain Sprites."}, {"title": "Daily / streak rewards", "category": "Ideas", "status": "idea", "priority": "low", "notes": "Potential retention layer once the base game is complete."}];
+const SPRITES=["X-Ray", "Blink", "Magnet", "Time", "Bounce", "Echo", "Ghoststep", "Gravity", "Shield", "Grapple", "Frostbite", "Thunder", "Burrow", "Decoy", "Vortex", "Mender", "Ricochet", "Silence", "Treasure", "Phase", "Sticky", "Rocket", "Swap", "Lucky", "Overcharge"];
+const defaultCategories=['Core Gameplay','Map Flow','Collection & Eggs','Sprite Assets','Abilities','UI & UX','Testing & Persistence','Ideas'];
+let tasks=[];
+let editId=null;
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function load(){
+  try{ tasks=JSON.parse(localStorage.getItem(KEY)||'null') || SEED.map(x=>({...x,id:uid()})); }
+  catch(e){tasks=SEED.map(x=>({...x,id:uid()}))}
+  tasks.forEach(t=>{if(!t.id)t.id=uid()});
+  localStorage.setItem(KEY,JSON.stringify(tasks));
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(tasks))}
+function esc(s=''){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function cats(){
+  return [...new Set([...defaultCategories,...tasks.map(t=>t.category).filter(Boolean)])].sort();
+}
+function syncCategoryMenus(){
+  let c=cats(), f=document.getElementById('catFilter'), fc=document.getElementById('fCategory');
+  let old=f.value, old2=fc.value;
+  f.innerHTML='<option value="">All categories</option>'+c.map(x=>`<option>${esc(x)}</option>`).join('');
+  fc.innerHTML=c.map(x=>`<option>${esc(x)}</option>`).join('');
+  f.value=old; if(c.includes(old2))fc.value=old2;
+}
+function filtered(){
+  const q=document.getElementById('search').value.trim().toLowerCase();
+  const cat=document.getElementById('catFilter').value;
+  const p=document.getElementById('priorityFilter').value;
+  const s=document.getElementById('statusFilter').value;
+  return tasks.filter(t=>(!q || `${t.title} ${t.notes} ${t.category}`.toLowerCase().includes(q))&&(!cat||t.category===cat)&&(!p||t.priority===p)&&(!s||t.status===s));
+}
+function card(t){
+  return `<article class="card ${t.status==='done'?'done':''}">
+    <div class="row">
+      <input class="check" type="checkbox" ${t.status==='done'?'checked':''} onchange="toggleDone('${t.id}',this.checked,this)">
+      <div class="title">${esc(t.title)}</div>
+    </div>
+    <div class="meta"><span class="pill">${esc(t.category||'Uncategorised')}</span><span class="pill ${t.priority}">${esc(t.priority||'medium')}</span>${t.status==='idea'?'<span class="pill">idea</span>':''}</div>
+    ${t.notes?`<div class="notes">${esc(t.notes)}</div>`:''}
+    <div class="cardBtns"><button class="icon" title="Edit" onclick="openEdit('${t.id}')">✎</button><button class="icon" title="Delete" onclick="delTask('${t.id}')">×</button></div>
+  </article>`;
+}
+function render(){
+  syncCategoryMenus();
+  const ft=filtered();
+  const done=ft.filter(t=>t.status==='done');
+  const doing=ft.filter(t=>t.status==='doing');
+  const next=ft.filter(t=>t.status==='todo'||t.status==='idea');
+  document.getElementById('done').innerHTML=done.map(card).join('')||'<div class="empty">Nothing here.</div>';
+  document.getElementById('doing').innerHTML=doing.map(card).join('')||'<div class="empty">Nothing here.</div>';
+  document.getElementById('next').innerHTML=next.map(card).join('')||'<div class="empty">Nothing here.</div>';
+  document.getElementById('count-done').textContent=done.length;
+  document.getElementById('count-doing').textContent=doing.length;
+  document.getElementById('count-next').textContent=next.length;
+  const d=tasks.filter(t=>t.status==='done').length, g=tasks.filter(t=>t.status==='doing').length, td=tasks.filter(t=>t.status==='todo').length, i=tasks.filter(t=>t.status==='idea').length;
+  doneN.textContent=d; doingN.textContent=g; todoN.textContent=td; ideaN.textContent=i;
+  prog.style.width=(tasks.length?Math.round(d/tasks.length*100):0)+'%';
+}
+function completionFx(el){
+  const r=el.getBoundingClientRect();
+  const x=r.left+r.width/2, y=r.top+r.height/2;
+  const layer=document.getElementById('fxLayer');
+
+  const flash=document.createElement('div');
+  flash.className='fx-flash';
+  flash.style.setProperty('--x',x+'px');
+  flash.style.setProperty('--y',y+'px');
+  layer.appendChild(flash);
+
+  for(let i=0;i<2;i++){
+    const ring=document.createElement('div');
+    ring.className='fx-ring'+(i?' r2':'');
+    ring.style.left=x+'px'; ring.style.top=y+'px';
+    layer.appendChild(ring);
+    setTimeout(()=>ring.remove(),1000);
+  }
+
+  for(let i=0;i<22;i++){
+    const p=document.createElement('div');
+    p.className='fx-particle';
+    p.style.left=x+'px'; p.style.top=y+'px';
+    const a=(Math.PI*2*i/22)+(Math.random()-.5)*.2;
+    const d=50+Math.random()*85;
+    p.style.setProperty('--dx',(Math.cos(a)*d)+'px');
+    p.style.setProperty('--dy',(Math.sin(a)*d)+'px');
+    layer.appendChild(p);
+    setTimeout(()=>p.remove(),900);
+  }
+
+  const card=el.closest('.card');
+  if(card){card.classList.remove('complete-pop'); void card.offsetWidth; card.classList.add('complete-pop');}
+
+  const toast=document.createElement('div');
+  toast.className='complete-toast';
+  toast.textContent=['SYSTEM COMPLETE','TASK LOCKED','IMPLEMENTED','MARK III COMPLETE'][Math.floor(Math.random()*4)];
+  document.body.appendChild(toast);
+  setTimeout(()=>toast.remove(),1300);
+
+  setTimeout(()=>flash.remove(),600);
+}
+
+function toggleDone(id,on,el){
+  let t=tasks.find(x=>x.id===id); if(!t)return;
+  if(on) completionFx(el);
+  t.status=on?'done':'todo';
+  save();
+  setTimeout(render,on?360:0);
+}
+function openAdd(){
+  editId=null; modalTitle.textContent='Add task / idea'; fTitle.value=''; fNotes.value=''; fStatus.value='todo'; fPriority.value='medium'; fNewCategory.value='';
+  syncCategoryMenus(); fCategory.value=defaultCategories[0]; modalBack.classList.add('open'); fTitle.focus();
+}
+function openEdit(id){
+  const t=tasks.find(x=>x.id===id);if(!t)return;editId=id;modalTitle.textContent='Edit task';
+  syncCategoryMenus(); fTitle.value=t.title; fCategory.value=t.category; fStatus.value=t.status; fPriority.value=t.priority; fNewCategory.value=''; fNotes.value=t.notes||'';
+  modalBack.classList.add('open'); fTitle.focus();
+}
+function closeModal(){modalBack.classList.remove('open')}
+function saveModal(){
+  const title=fTitle.value.trim(); if(!title){fTitle.focus();return}
+  const category=fNewCategory.value.trim()||fCategory.value||'Ideas';
+  const obj={title,category,status:fStatus.value,priority:fPriority.value,notes:fNotes.value.trim()};
+  if(editId)Object.assign(tasks.find(x=>x.id===editId),obj); else tasks.unshift({...obj,id:uid()});
+  save();closeModal();render();
+}
+function delTask(id){if(confirm('Delete this item?')){tasks=tasks.filter(x=>x.id!==id);save();render()}}
+
+const IDEA_BANK = [
+  {title:"Sprite Synergy Bonuses",category:"Ideas",priority:"medium",notes:"Let certain Sprite pairs unlock a temporary bonus, special VFX, or alternate route when both are owned."},
+  {title:"Secret Ability Doors",category:"Ideas",priority:"medium",notes:"Hide optional doors in sections that only open when the equipped Sprite has the matching ability type."},
+  {title:"Perfect Click Streak Meter",category:"Core Gameplay",priority:"medium",notes:"Reward consistent clicking rhythm with a temporary multiplier or faster Sprite Mode charge."},
+  {title:"Golden Egg Jackpot",category:"Collection & Eggs",priority:"medium",notes:"Give every hatch a tiny chance to become a Golden Egg with boosted rarity odds and unique reveal effects."},
+  {title:"Sprite Mastery Levels",category:"Collection & Eggs",priority:"high",notes:"Track use per Sprite and unlock small permanent perks, titles, cosmetics, or variant colours through mastery."},
+  {title:"Section Speed Bonuses",category:"Core Gameplay",priority:"medium",notes:"Reward finishing a section under a target time with extra wins or temporary power."},
+  {title:"Rare Shiny Sprite Variant",category:"Collection & Eggs",priority:"medium",notes:"Add a very low hatch chance for a shiny visual variant using the existing editable Sprite materials."},
+  {title:"Sprite Ability Combo Rooms",category:"Map Flow",priority:"medium",notes:"Create rooms where different Sprites offer different optimal solutions rather than one universally best choice."},
+  {title:"Win Streak Multiplier",category:"Core Gameplay",priority:"high",notes:"Consecutive successful section clears could increase wins until the player fails, quits, or resets."},
+  {title:"Egg Luck Pity System",category:"Collection & Eggs",priority:"high",notes:"After enough unlucky hatches, gradually increase the chance of the rarest Sprite in that egg tier."},
+  {title:"Sprite Showcase Pedestals",category:"UI & UX",priority:"low",notes:"Add a lobby display area showing collected Sprites, rare variants, favourites, or mastery progress."},
+  {title:"Ability Shortcut Routes",category:"Map Flow",priority:"high",notes:"Design alternate paths through levels where certain abilities save meaningful time without making others useless."},
+  {title:"Sprite Mode Finisher VFX",category:"Sprite Assets",priority:"low",notes:"When Sprite Mode ends, trigger a unique burst matching the equipped Sprite's theme."},
+  {title:"Daily Egg Discount",category:"Ideas",priority:"low",notes:"Rotate one egg tier each session/day with a temporary reduced wins cost."},
+  {title:"Mystery Sprite Silhouette",category:"UI & UX",priority:"medium",notes:"Before hatching a never-seen Sprite, show only a silhouette to make collection completion feel more exciting."},
+  {title:"First-Time Section Bonus",category:"Core Gameplay",priority:"medium",notes:"Award a one-time bonus for clearing each section for the first time."},
+  {title:"Sprite Favourite Slot",category:"UI & UX",priority:"low",notes:"Let players favourite a Sprite so it appears first in selection and is easy to equip."},
+  {title:"Mini Boss Checkpoints",category:"Map Flow",priority:"medium",notes:"Add short obstacle or reaction challenges before certain WIN zones to make section endings feel more memorable."},
+  {title:"Ability Preview in Menu",category:"UI & UX",priority:"medium",notes:"Show a short animated preview or concise gameplay example beside each Sprite before equipping."},
+  {title:"Duplicate Evolution Threshold",category:"Collection & Eggs",priority:"medium",notes:"After collecting enough duplicates, unlock a cosmetic evolution or upgraded ability behaviour instead of only raw stats."}
+];
+
+function generateIdea(){
+  const unused = IDEA_BANK.filter(i=>!tasks.some(t=>t.title===i.title));
+  const pool = unused.length ? unused : IDEA_BANK;
+  const pick = pool[Math.floor(Math.random()*pool.length)];
+  const t = {
+    id: uid(),
+    title: pick.title,
+    category: pick.category,
+    status: "idea",
+    priority: pick.priority,
+    notes: pick.notes
+  };
+  tasks.unshift(t);
+  save();
+  render();
+
+  const toast=document.createElement('div');
+  toast.className='complete-toast';
+  toast.textContent='CONCEPT GENERATED';
+  document.body.appendChild(toast);
+  setTimeout(()=>toast.remove(),1300);
+
+  setTimeout(()=>{
+    const cards=[...document.querySelectorAll('.card')];
+    const target=cards.find(c=>c.querySelector('.title')?.textContent===pick.title);
+    if(target){
+      target.scrollIntoView({behavior:'smooth',block:'center'});
+      target.classList.remove('complete-pop'); void target.offsetWidth; target.classList.add('complete-pop');
+    }
+  },50);
+}
+
+function resetFilters(){search.value='';catFilter.value='';priorityFilter.value='';statusFilter.value='';render()}
+function exportData(){
+  const blob=new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),tasks},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sprite-uefn-board-backup.json';a.click();URL.revokeObjectURL(a.href);
+}
+function importData(e){
+  const f=e.target.files[0]; if(!f)return; const r=new FileReader();
+  r.onload=()=>{try{let d=JSON.parse(r.result);let arr=Array.isArray(d)?d:d.tasks;if(!Array.isArray(arr))throw 0;tasks=arr.map(x=>({...x,id:x.id||uid()}));save();render();alert('Board imported.')}catch{alert('That JSON file is not a valid board backup.')}};
+  r.readAsText(f);e.target.value='';
+}
+function resetSeed(){
+  if(confirm('Reset the board to the original Codex-derived checklist? Your current local edits will be replaced.')){tasks=SEED.map(x=>({...x,id:uid()}));save();render()}
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal(); if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();search.focus()}});
+document.getElementById('spriteGrid').innerHTML=SPRITES.map((s,i)=>`<div class="sprite"><b>${String(i+1).padStart(2,'0')}</b> · ${esc(s)}</div>`).join('');
+load();render();
+
+window.addEventListener('DOMContentLoaded',()=>{const boot=document.getElementById('bootSequence');setTimeout(()=>boot?.classList.add('boot-hide'),1450);setTimeout(()=>boot?.remove(),2000);});
+</script>
+</body>
+</html>
