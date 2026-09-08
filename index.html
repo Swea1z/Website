@@ -54,7 +54,44 @@ html,body{margin:0;width:100%;height:100%;background:#020304;overflow:hidden;fon
 .bar{height:100%;width:0;background:linear-gradient(90deg,#ff3b1f,#ff8b2d,#ffc247);box-shadow:0 0 18px #ff8b2d;animation:load 1.2s cubic-bezier(.2,.8,.2,1) forwards}
 .online{opacity:0;margin-top:17px;color:#58f7b2;font-weight:950;font-size:13px;letter-spacing:.14em;text-shadow:0 0 14px #58f7b288;animation:online .25s ease .98s forwards}
 @keyframes load{to{width:100%}}@keyframes online{to{opacity:1}}
-iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#020304}
+iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#020304;transition:filter .22s ease,opacity .22s ease}
+
+.focus-launch{
+  position:fixed;left:22px;top:22px;z-index:998;
+  border:1px solid rgba(255,194,71,.5);border-radius:12px;
+  padding:12px 16px;background:linear-gradient(135deg,rgba(255,59,31,.94),rgba(255,139,45,.94) 62%,rgba(255,194,71,.94));
+  color:#1b0802;font-weight:1000;letter-spacing:.12em;text-transform:uppercase;
+  box-shadow:0 0 24px rgba(255,83,34,.22);cursor:pointer;
+  opacity:0;pointer-events:none;transform:translateY(-6px);transition:.2s ease;
+}
+.focus-launch.ready{opacity:1;pointer-events:auto;transform:none}
+.focus-launch:hover{transform:translateY(-1px);box-shadow:0 0 32px rgba(255,121,44,.38)}
+body.focus-active iframe{filter:brightness(.22) saturate(.65) blur(1.5px);opacity:.72}
+.focus-backdrop{
+  display:none;position:fixed;inset:0;z-index:1500;align-items:center;justify-content:center;padding:24px;
+  background:radial-gradient(circle at 50% 46%,rgba(255,91,34,.12),rgba(0,0,0,.52) 44%,rgba(0,0,0,.78));
+  backdrop-filter:blur(3px)
+}
+.focus-backdrop.open{display:flex}
+.focus-panel{
+  width:min(720px,92vw);padding:26px;border-radius:20px;
+  border:1px solid rgba(255,194,71,.52);
+  background:linear-gradient(180deg,rgba(20,22,24,.98),rgba(7,8,9,.99));
+  box-shadow:0 28px 100px #000d,0 0 50px rgba(255,84,30,.18),inset 0 0 34px rgba(255,194,71,.035);
+  color:#fff7eb;position:relative;overflow:hidden
+}
+.focus-panel:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,#ff3b1f,#ffc247,transparent)}
+.focus-kicker{color:#ffc247;font-size:11px;font-weight:1000;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
+.focus-title{font-size:clamp(25px,4vw,40px);font-weight:1000;line-height:1.08;letter-spacing:-.025em;text-shadow:0 0 20px rgba(255,105,42,.18)}
+.focus-meta{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}
+.focus-pill{font-size:10px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;padding:5px 9px;border-radius:99px;border:1px solid rgba(255,194,71,.28);background:#160f0b;color:#ffe29a}
+.focus-notes{color:#c8b9ad;font-size:14px;line-height:1.6;white-space:pre-wrap;min-height:24px}
+.focus-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap}
+.focus-btn{border:1px solid rgba(255,126,64,.34);background:#111214;color:#fff7eb;padding:11px 16px;border-radius:10px;font-weight:900;cursor:pointer}
+.focus-btn:hover{border-color:#ffc247}
+.focus-btn.done{color:#170702;border-color:#ffad34;background:linear-gradient(135deg,#ff3b1f,#ff8b2d 58%,#ffc247)}
+.focus-empty{text-align:center;color:#b9ada4;padding:12px 0 4px}
+@media(max-width:720px){.system-clock{display:none}.focus-launch{top:14px;left:14px}.focus-panel{padding:20px}.focus-actions{justify-content:stretch}.focus-btn{flex:1}}
 </style>
 </head>
 <body>
@@ -62,8 +99,25 @@ iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#020304
   <div class="system-clock-label">SYSTEM TIME</div>
   <div id="systemClockTime" class="system-clock-time">00:00:00</div>
 </div>
+<button id="focusLaunch" class="focus-launch" type="button">⚡ Focus Mode</button>
+<div id="focusBackdrop" class="focus-backdrop" aria-hidden="true">
+  <section class="focus-panel" role="dialog" aria-modal="true" aria-labelledby="focusTitle">
+    <div class="focus-kicker">Priority Lock // Focus Mode</div>
+    <div id="focusContent">
+      <div id="focusTitle" class="focus-title"></div>
+      <div id="focusMeta" class="focus-meta"></div>
+      <div id="focusNotes" class="focus-notes"></div>
+    </div>
+    <div id="focusEmpty" class="focus-empty" hidden>No unfinished tasks left. System clear.</div>
+    <div class="focus-actions">
+      <button id="focusExit" class="focus-btn" type="button">Exit</button>
+      <button id="focusSkip" class="focus-btn" type="button">Skip</button>
+      <button id="focusDone" class="focus-btn done" type="button">✓ Done</button>
+    </div>
+  </section>
+</div>
 <div id="boot"><div class="core"><div class="brand">STARK SYSTEMS</div><div class="title">SPRITE PROTOCOL</div><div class="status">INITIALIZING COMMAND SYSTEMS...</div><div class="track"><div class="bar"></div></div><div class="online">SYSTEM ONLINE // WELCOME BACK</div></div></div>
-<iframe src="/board.html" title="Sprite UEFN Project Board"></iframe>
+<iframe id="boardFrame" src="/board.html" title="Sprite UEFN Project Board"></iframe>
 <script>window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('boot')?.classList.add('hide'),1500);setTimeout(()=>document.getElementById('boot')?.remove(),2050);});</script>
 <script>
 function updateSystemClock() {
@@ -81,6 +135,100 @@ function updateSystemClock() {
 
 updateSystemClock();
 setInterval(updateSystemClock, 1000);
+
+const boardFrame=document.getElementById('boardFrame');
+const focusLaunch=document.getElementById('focusLaunch');
+const focusBackdrop=document.getElementById('focusBackdrop');
+const focusContent=document.getElementById('focusContent');
+const focusEmpty=document.getElementById('focusEmpty');
+const focusTitle=document.getElementById('focusTitle');
+const focusMeta=document.getElementById('focusMeta');
+const focusNotes=document.getElementById('focusNotes');
+const focusDone=document.getElementById('focusDone');
+const focusSkip=document.getElementById('focusSkip');
+const focusExit=document.getElementById('focusExit');
+let focusTask=null;
+const focusSkipped=new Set();
+
+function taskIdFromCard(card){
+  const handler=card.querySelector('.check')?.getAttribute('onchange')||'';
+  return handler.match(/toggleDone\('([^']+)'/)?.[1] || `${card.querySelector('.title')?.textContent||''}-${card.querySelector('.pill')?.textContent||''}`;
+}
+
+function focusCandidates(){
+  const doc=boardFrame.contentDocument;
+  if(!doc)return [];
+  const priorityRank={high:0,medium:1,low:2};
+  const laneRank={doing:0,next:1};
+  return [...doc.querySelectorAll('#doing .card:not(.done), #next .card:not(.done)')]
+    .map((card,index)=>{
+      const priority=['high','medium','low'].find(p=>card.querySelector(`.pill.${p}`))||'medium';
+      const lane=card.closest('.cards')?.id||'next';
+      return {
+        id:taskIdFromCard(card),card,index,priority,lane,
+        title:card.querySelector('.title')?.textContent?.trim()||'Untitled task',
+        category:card.querySelector('.meta .pill')?.textContent?.trim()||'Uncategorised',
+        notes:card.querySelector('.notes')?.textContent?.trim()||''
+      };
+    })
+    .filter(t=>!focusSkipped.has(t.id))
+    .sort((a,b)=>(priorityRank[a.priority]-priorityRank[b.priority])||(laneRank[a.lane]-laneRank[b.lane])||(a.index-b.index));
+}
+
+function showFocusTask(){
+  const candidates=focusCandidates();
+  focusTask=candidates[0]||null;
+  const empty=!focusTask;
+  focusContent.hidden=empty;
+  focusEmpty.hidden=!empty;
+  focusDone.hidden=empty;
+  focusSkip.hidden=empty;
+  if(empty)return;
+
+  focusTitle.textContent=focusTask.title;
+  focusMeta.innerHTML='';
+  [focusTask.priority+' priority',focusTask.lane==='doing'?'in progress':'next up',focusTask.category].forEach(text=>{
+    const pill=document.createElement('span');
+    pill.className='focus-pill';
+    pill.textContent=text;
+    focusMeta.appendChild(pill);
+  });
+  focusNotes.textContent=focusTask.notes||'No notes for this task.';
+}
+
+function enterFocusMode(){
+  focusSkipped.clear();
+  document.body.classList.add('focus-active');
+  focusBackdrop.classList.add('open');
+  focusBackdrop.setAttribute('aria-hidden','false');
+  showFocusTask();
+}
+
+function exitFocusMode(){
+  document.body.classList.remove('focus-active');
+  focusBackdrop.classList.remove('open');
+  focusBackdrop.setAttribute('aria-hidden','true');
+  focusTask=null;
+  focusSkipped.clear();
+}
+
+focusLaunch.addEventListener('click',enterFocusMode);
+focusExit.addEventListener('click',exitFocusMode);
+focusSkip.addEventListener('click',()=>{
+  if(!focusTask)return;
+  focusSkipped.add(focusTask.id);
+  showFocusTask();
+});
+focusDone.addEventListener('click',()=>{
+  if(!focusTask)return;
+  const checkbox=focusTask.card.querySelector('.check');
+  if(!checkbox)return;
+  focusSkipped.delete(focusTask.id);
+  checkbox.click();
+  setTimeout(showFocusTask,450);
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&focusBackdrop.classList.contains('open'))exitFocusMode()});
+boardFrame.addEventListener('load',()=>focusLaunch.classList.add('ready'));
 </script>
 </body>
 </html>
