@@ -5,267 +5,103 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sprite UEFN Project Board</title>
 <style>
-.system-clock{
-  position:fixed;
-  top:22px;
-  right:22px;
-  z-index:999;
-  min-width:190px;
-  padding:12px 16px;
-  border:1px solid rgba(255,194,71,.4);
-  border-radius:12px;
-  background:linear-gradient(
-    180deg,
-    rgba(18,20,22,.94),
-    rgba(7,8,9,.96)
-  );
-  box-shadow:
-    0 0 22px rgba(255,83,34,.12),
-    inset 0 0 18px rgba(255,194,71,.04);
-  text-align:right;
-  backdrop-filter:blur(10px);
-}
-
-.system-clock-label{
-  color:#ffc247;
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  margin-bottom:3px;
-}
-
-.system-clock-time{
-  color:#fff4df;
-  font-size:26px;
-  font-weight:900;
-  letter-spacing:.08em;
-  text-shadow:0 0 14px rgba(255,133,55,.35);
-  font-variant-numeric:tabular-nums;
-}
-html,body{margin:0;width:100%;height:100%;background:#020304;overflow:hidden;font-family:Inter,Arial,sans-serif}
-#boot{position:fixed;inset:0;z-index:20;background:radial-gradient(circle at 50% 42%,#2b0d05 0,#090604 38%,#020303 76%);display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;transition:opacity .45s ease,visibility .45s ease}
-#boot.hide{opacity:0;visibility:hidden}
-.core{width:min(680px,88vw)}
-.brand{font-size:12px;color:#ffc247;font-weight:900;letter-spacing:.32em;margin-bottom:18px;text-shadow:0 0 16px #ff8b2d}
-.title{font-size:clamp(30px,5vw,58px);font-weight:1000;color:#fff7eb;text-shadow:0 0 12px #ff3b1f,0 0 34px #ff6a2a;margin-bottom:12px}
-.status{font-size:12px;color:#ffb35e;letter-spacing:.18em;margin-bottom:18px}
-.track{height:4px;background:#24100a;border:1px solid #7a2b16;border-radius:99px;overflow:hidden;box-shadow:0 0 18px #ff3b1f55}
-.bar{height:100%;width:0;background:linear-gradient(90deg,#ff3b1f,#ff8b2d,#ffc247);box-shadow:0 0 18px #ff8b2d;animation:load 1.2s cubic-bezier(.2,.8,.2,1) forwards}
-.online{opacity:0;margin-top:17px;color:#58f7b2;font-weight:950;font-size:13px;letter-spacing:.14em;text-shadow:0 0 14px #58f7b288;animation:online .25s ease .98s forwards}
-@keyframes load{to{width:100%}}@keyframes online{to{opacity:1}}
-iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#020304;transition:filter .22s ease,opacity .22s ease}
-
-.focus-launch{
-  position:fixed;left:22px;top:22px;z-index:998;
-  border:1px solid rgba(255,194,71,.5);border-radius:12px;
-  padding:12px 16px;background:linear-gradient(135deg,rgba(255,59,31,.94),rgba(255,139,45,.94) 62%,rgba(255,194,71,.94));
-  color:#1b0802;font-weight:1000;letter-spacing:.12em;text-transform:uppercase;
-  box-shadow:0 0 24px rgba(255,83,34,.22);cursor:pointer;
-  opacity:0;pointer-events:none;transform:translateY(-6px);transition:.2s ease;
-}
-.focus-launch.ready{opacity:1;pointer-events:auto;transform:none}
-.focus-launch:hover{transform:translateY(-1px);box-shadow:0 0 32px rgba(255,121,44,.38)}
-body.focus-active iframe{filter:brightness(.22) saturate(.65) blur(1.5px);opacity:.72}
-.focus-backdrop{
-  display:none;position:fixed;inset:0;z-index:1500;align-items:center;justify-content:center;padding:24px;
-  background:radial-gradient(circle at 50% 46%,rgba(255,91,34,.12),rgba(0,0,0,.52) 44%,rgba(0,0,0,.78));
-  backdrop-filter:blur(3px)
-}
-.focus-backdrop.open{display:flex}
-.focus-panel{
-  width:min(720px,92vw);padding:26px;border-radius:20px;
-  border:1px solid rgba(255,194,71,.52);
-  background:linear-gradient(180deg,rgba(20,22,24,.98),rgba(7,8,9,.99));
-  box-shadow:0 28px 100px #000d,0 0 50px rgba(255,84,30,.18),inset 0 0 34px rgba(255,194,71,.035);
-  color:#fff7eb;position:relative;overflow:hidden
-}
-.focus-panel:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,#ff3b1f,#ffc247,transparent)}
-.focus-kicker{color:#ffc247;font-size:11px;font-weight:1000;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
-.focus-title{font-size:clamp(25px,4vw,40px);font-weight:1000;line-height:1.08;letter-spacing:-.025em;text-shadow:0 0 20px rgba(255,105,42,.18)}
-.focus-meta{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}
-.focus-pill{font-size:10px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;padding:5px 9px;border-radius:99px;border:1px solid rgba(255,194,71,.28);background:#160f0b;color:#ffe29a}
-.focus-notes{color:#c8b9ad;font-size:14px;line-height:1.6;white-space:pre-wrap;min-height:24px}
-.focus-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap}
-.focus-btn{border:1px solid rgba(255,126,64,.34);background:#111214;color:#fff7eb;padding:11px 16px;border-radius:10px;font-weight:900;cursor:pointer}
-.focus-btn:hover{border-color:#ffc247}
-.focus-btn.codex{border-color:rgba(94,231,255,.48);color:#c9f7ff;background:linear-gradient(180deg,rgba(15,33,38,.96),rgba(8,16,20,.98));box-shadow:0 0 18px rgba(94,231,255,.08)}
-.focus-btn.codex:hover{border-color:#5ee7ff;box-shadow:0 0 24px rgba(94,231,255,.15)}
-.focus-btn.done{color:#170702;border-color:#ffad34;background:linear-gradient(135deg,#ff3b1f,#ff8b2d 58%,#ffc247)}
-.focus-empty{text-align:center;color:#b9ada4;padding:12px 0 4px}
-.handoff-status{min-height:18px;margin-top:12px;text-align:right;color:#72f2c1;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
-@media(max-width:720px){.system-clock{display:none}.focus-launch{top:14px;left:14px}.focus-panel{padding:20px}.focus-actions{justify-content:stretch}.focus-btn{flex:1}.handoff-status{text-align:center}}
+:root{--red:#ff3b1f;--orange:#ff8b2d;--gold:#ffc247;--gold2:#ffe29a;--cyan:#5ee7ff;--green:#58f7b2;--text:#fff7eb;--muted:#b7aaa0}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#020304;overflow:hidden;font-family:Inter,Arial,sans-serif}
+.system-clock{position:fixed;top:22px;right:22px;z-index:999;min-width:190px;padding:12px 16px;border:1px solid rgba(255,194,71,.4);border-radius:12px;background:linear-gradient(180deg,rgba(18,20,22,.94),rgba(7,8,9,.96));box-shadow:0 0 22px rgba(255,83,34,.12),inset 0 0 18px rgba(255,194,71,.04);text-align:right;backdrop-filter:blur(10px)}
+.system-clock-label{color:#ffc247;font-size:10px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;margin-bottom:3px}.system-clock-time{color:#fff4df;font-size:26px;font-weight:900;letter-spacing:.08em;text-shadow:0 0 14px rgba(255,133,55,.35);font-variant-numeric:tabular-nums}
+#boot{position:fixed;inset:0;z-index:3000;background:radial-gradient(circle at 50% 42%,#2b0d05 0,#090604 38%,#020303 76%);display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;transition:opacity .45s ease,visibility .45s ease}#boot.hide{opacity:0;visibility:hidden}.core{width:min(680px,88vw)}.brand{font-size:12px;color:#ffc247;font-weight:900;letter-spacing:.32em;margin-bottom:18px;text-shadow:0 0 16px #ff8b2d}.boot-title{font-size:clamp(30px,5vw,58px);font-weight:1000;color:#fff7eb;text-shadow:0 0 12px #ff3b1f,0 0 34px #ff6a2a;margin-bottom:12px}.status{font-size:12px;color:#ffb35e;letter-spacing:.18em;margin-bottom:18px}.track{height:4px;background:#24100a;border:1px solid #7a2b16;border-radius:99px;overflow:hidden;box-shadow:0 0 18px #ff3b1f55}.bar{height:100%;width:0;background:linear-gradient(90deg,#ff3b1f,#ff8b2d,#ffc247);box-shadow:0 0 18px #ff8b2d;animation:load 1.2s cubic-bezier(.2,.8,.2,1) forwards}.online{opacity:0;margin-top:17px;color:#58f7b2;font-weight:950;font-size:13px;letter-spacing:.14em;text-shadow:0 0 14px #58f7b288;animation:online .25s ease .98s forwards}@keyframes load{to{width:100%}}@keyframes online{to{opacity:1}}
+iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#020304;transition:filter .22s ease,opacity .22s ease}body.overlay-open iframe,body.focus-active iframe{filter:brightness(.18) saturate(.65) blur(1.5px);opacity:.68}
+.focus-launch{position:fixed;left:22px;top:22px;z-index:998;border:1px solid rgba(255,194,71,.5);border-radius:12px;padding:12px 16px;background:linear-gradient(135deg,rgba(255,59,31,.94),rgba(255,139,45,.94) 62%,rgba(255,194,71,.94));color:#1b0802;font-weight:1000;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 0 24px rgba(255,83,34,.22);cursor:pointer;opacity:0;pointer-events:none;transform:translateY(-6px);transition:.2s ease}.focus-launch.ready{opacity:1;pointer-events:auto;transform:none}.focus-launch:hover{transform:translateY(-1px);box-shadow:0 0 32px rgba(255,121,44,.38)}
+.overlay{display:none;position:fixed;inset:0;z-index:2000;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 50% 46%,rgba(255,91,34,.12),rgba(0,0,0,.56) 44%,rgba(0,0,0,.82));backdrop-filter:blur(4px)}.overlay.open{display:flex}.panel{width:min(760px,94vw);max-height:90vh;overflow:auto;padding:24px;border-radius:20px;border:1px solid rgba(255,194,71,.46);background:linear-gradient(180deg,rgba(20,22,24,.99),rgba(7,8,9,.995));box-shadow:0 28px 100px #000d,0 0 50px rgba(255,84,30,.15),inset 0 0 34px rgba(255,194,71,.035);color:var(--text);position:relative}.panel:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),var(--gold),transparent)}
+.kicker{color:var(--gold);font-size:11px;font-weight:1000;letter-spacing:.2em;text-transform:uppercase;margin-bottom:9px}.focus-title{font-size:clamp(25px,4vw,40px);font-weight:1000;line-height:1.08;letter-spacing:-.025em;text-shadow:0 0 20px rgba(255,105,42,.18)}.focus-meta{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.pill{font-size:10px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;padding:5px 9px;border-radius:99px;border:1px solid rgba(255,194,71,.28);background:#160f0b;color:#ffe29a}.notes{color:#c8b9ad;font-size:14px;line-height:1.6;white-space:pre-wrap;min-height:24px}.actions{display:flex;gap:9px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}.btn{border:1px solid rgba(255,126,64,.34);background:#111214;color:#fff7eb;padding:11px 15px;border-radius:10px;font-weight:900;cursor:pointer}.btn:hover{border-color:#ffc247}.btn.primary{color:#170702;border-color:#ffad34;background:linear-gradient(135deg,#ff3b1f,#ff8b2d 58%,#ffc247)}.btn.codex{border-color:rgba(94,231,255,.48);color:#c9f7ff;background:linear-gradient(180deg,rgba(15,33,38,.96),rgba(8,16,20,.98))}.btn.green{border-color:rgba(88,247,178,.45);color:#b9ffdf;background:#0a1a15}.btn.danger{border-color:rgba(255,93,117,.45);color:#ffc4cd;background:#1c0c0f}.statusline{min-height:18px;margin-top:12px;text-align:right;color:#72f2c1;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.field{width:100%;border:1px solid rgba(255,119,55,.25);background:#090b0d;color:var(--text);border-radius:9px;padding:10px 11px;outline:none}.field:focus{border-color:rgba(255,194,71,.75);box-shadow:0 0 0 2px rgba(255,194,71,.07)}textarea.field{min-height:105px;resize:vertical}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.wide{grid-column:1/-1}.label{display:block;color:#ae9f94;font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin:12px 0 6px}.subtle{color:#8f8177;font-size:12px;line-height:1.5}.mode-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 0}.mode{border:1px solid rgba(255,126,64,.24);background:#0b0d0e;color:#baa99c;padding:9px;border-radius:9px;font-weight:850;cursor:pointer}.mode.active{border-color:#5ee7ff;color:#d5faff;box-shadow:0 0 14px rgba(94,231,255,.09)}
+.test-list{display:flex;flex-direction:column;gap:7px;margin-top:10px}.test-row{display:flex;gap:8px;align-items:flex-start;color:#d5c8bd}.test-row input{margin-top:3px}.empty{text-align:center;color:#a99a90;padding:16px}
+@media(max-width:720px){.system-clock{display:none}.focus-launch{top:14px;left:14px}.panel{padding:19px}.actions{justify-content:stretch}.btn{flex:1}.mode-row{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.wide{grid-column:auto}.statusline{text-align:center}}
 </style>
 </head>
 <body>
-<div id="systemClock" class="system-clock">
-  <div class="system-clock-label">SYSTEM TIME</div>
-  <div id="systemClockTime" class="system-clock-time">00:00:00</div>
-</div>
+<div id="systemClock" class="system-clock"><div class="system-clock-label">SYSTEM TIME</div><div id="systemClockTime" class="system-clock-time">00:00:00</div></div>
 <button id="focusLaunch" class="focus-launch" type="button">⚡ Focus Mode</button>
-<div id="focusBackdrop" class="focus-backdrop" aria-hidden="true">
-  <section class="focus-panel" role="dialog" aria-modal="true" aria-labelledby="focusTitle">
-    <div class="focus-kicker">Priority Lock // Focus Mode</div>
-    <div id="focusContent">
-      <div id="focusTitle" class="focus-title"></div>
-      <div id="focusMeta" class="focus-meta"></div>
-      <div id="focusNotes" class="focus-notes"></div>
-    </div>
-    <div id="focusEmpty" class="focus-empty" hidden>No unfinished tasks left. System clear.</div>
-    <div class="focus-actions">
-      <button id="focusExit" class="focus-btn" type="button">Exit</button>
-      <button id="focusSkip" class="focus-btn" type="button">Skip</button>
-      <button id="focusCodex" class="focus-btn codex" type="button">↗ Send to Codex</button>
-      <button id="focusDone" class="focus-btn done" type="button">✓ Done</button>
-    </div>
-    <div id="focusHandoffStatus" class="handoff-status" aria-live="polite"></div>
-  </section>
-</div>
-<div id="boot"><div class="core"><div class="brand">STARK SYSTEMS</div><div class="title">SPRITE PROTOCOL</div><div class="status">INITIALIZING COMMAND SYSTEMS...</div><div class="track"><div class="bar"></div></div><div class="online">SYSTEM ONLINE // WELCOME BACK</div></div></div>
+
+<div id="focusOverlay" class="overlay" aria-hidden="true"><section class="panel" role="dialog" aria-modal="true">
+  <div class="kicker">Priority Lock // Smart Focus</div><div id="focusContent"><div id="focusTitle" class="focus-title"></div><div id="focusMeta" class="focus-meta"></div><div id="focusNotes" class="notes"></div><div id="focusTests" class="test-list"></div></div><div id="focusEmpty" class="empty" hidden>No actionable tasks left. System clear.</div>
+  <div id="codexModes" class="mode-row"><button class="mode active" data-mode="implement">Implement</button><button class="mode" data-mode="debug">Debug</button><button class="mode" data-mode="polish">Polish</button><button class="mode" data-mode="investigate">Investigate</button></div>
+  <div class="actions"><button id="focusExit" class="btn">Exit</button><button id="focusSkip" class="btn">Skip</button><button id="focusDetails" class="btn">⚙ Workflow</button><button id="focusCodex" class="btn codex">↗ Send to Codex</button><button id="focusTesting" class="btn green">🧪 Needs Testing</button><button id="focusDone" class="btn primary">✓ Implemented</button></div><div id="focusStatus" class="statusline"></div>
+</section></div>
+
+<div id="workflowOverlay" class="overlay"><section class="panel"><div class="kicker">Task Control // Workflow</div><div id="wfTitle" class="focus-title" style="font-size:28px"></div>
+  <div class="grid2"><div><label class="label">Estimated effort</label><select id="wfEstimate" class="field"><option value="15">15 min quick win</option><option value="30">30 min</option><option value="60">1 hour</option><option value="120">2+ hours</option></select></div><div><label class="label">Workflow weight</label><select id="wfBlocker" class="field"><option value="0">Normal task</option><option value="1">Blocks other work</option></select></div>
+  <div class="wide"><label class="label">Blocked by</label><select id="wfDeps" class="field" multiple size="6"></select><div class="subtle">Focus Mode ignores this task until every selected dependency is Implemented.</div></div>
+  <div class="wide"><label class="label">UEFN test checklist — one test per line</label><textarea id="wfTests" class="field" placeholder="Win awards once&#10;HUD updates immediately&#10;Works on second run&#10;Multiplayer unaffected"></textarea></div>
+  <div class="wide"><label class="label">Codex result / implementation summary</label><textarea id="wfCodexResult" class="field" placeholder="Paste Codex's final summary here so tomorrow-you knows exactly what changed."></textarea></div></div>
+  <div class="actions"><button class="btn" onclick="closeOverlay('workflowOverlay')">Cancel</button><button id="wfToTesting" class="btn green">🧪 Needs Testing</button><button id="wfSave" class="btn primary">Save Workflow</button></div>
+</section></div>
+
+<div id="bugOverlay" class="overlay"><section class="panel"><div class="kicker">Rapid Capture // Bug</div><div class="focus-title" style="font-size:28px">Log it. Keep testing.</div><label class="label">What broke?</label><input id="bugTitle" class="field" placeholder="Sprite Mode UI stays after respawn"><label class="label">What happened / reproduction notes</label><textarea id="bugNotes" class="field" placeholder="Steps, expected result, actual result..."></textarea><div class="grid2"><div><label class="label">Priority</label><select id="bugPriority" class="field"><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></div><div><label class="label">Estimate</label><select id="bugEstimate" class="field"><option value="15">15 min</option><option value="30" selected>30 min</option><option value="60">1 hour</option><option value="120">2+ hours</option></select></div></div><div class="actions"><button class="btn" onclick="closeOverlay('bugOverlay')">Cancel</button><button id="bugSave" class="btn danger">🐛 Capture Bug</button></div></section></div>
+
+<div id="sessionOverlay" class="overlay"><section class="panel"><div class="kicker">Execution Queue // Work Session</div><div class="focus-title" style="font-size:28px">How long are we building?</div><div class="subtle" style="margin:10px 0 15px">I’ll build a realistic NOW → NEXT → AFTER THAT queue from actionable tasks, blockers and estimates.</div><div class="actions" style="justify-content:flex-start"><button class="btn session-choice" data-min="60">1 Hour</button><button class="btn session-choice" data-min="120">2 Hours</button><button class="btn session-choice primary" data-min="240">4 Hours</button></div><div class="actions"><button class="btn" onclick="closeOverlay('sessionOverlay')">Cancel</button></div></section></div>
+
+<div id="boot"><div class="core"><div class="brand">STARK SYSTEMS</div><div class="boot-title">SPRITE PROTOCOL</div><div class="status">INITIALIZING COMMAND SYSTEMS...</div><div class="track"><div class="bar"></div></div><div class="online">SYSTEM ONLINE // WELCOME BACK</div></div></div>
 <iframe id="boardFrame" src="/board.html" title="Sprite UEFN Project Board"></iframe>
-<script>window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('boot')?.classList.add('hide'),1500);setTimeout(()=>document.getElementById('boot')?.remove(),2050);});</script>
+
 <script>
-function updateSystemClock() {
-  const now = new Date();
-
-  const time = now.toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false
-  });
-
-  document.getElementById("systemClockTime").textContent = time;
-}
-
-updateSystemClock();
-setInterval(updateSystemClock, 1000);
-
+const BOARD_KEY='sprite-uefn-board-v1',FLOW_KEY='sprite-uefn-workflow-v2';
 const boardFrame=document.getElementById('boardFrame');
-const focusLaunch=document.getElementById('focusLaunch');
-const focusBackdrop=document.getElementById('focusBackdrop');
-const focusContent=document.getElementById('focusContent');
-const focusEmpty=document.getElementById('focusEmpty');
-const focusTitle=document.getElementById('focusTitle');
-const focusMeta=document.getElementById('focusMeta');
-const focusNotes=document.getElementById('focusNotes');
-const focusDone=document.getElementById('focusDone');
-const focusSkip=document.getElementById('focusSkip');
-const focusExit=document.getElementById('focusExit');
-const focusCodex=document.getElementById('focusCodex');
-const focusHandoffStatus=document.getElementById('focusHandoffStatus');
-let focusTask=null;
-const focusSkipped=new Set();
-
-function taskIdFromCard(card){
-  const handler=card.querySelector('.check')?.getAttribute('onchange')||'';
-  return handler.match(/toggleDone\('([^']+)'/)?.[1] || `${card.querySelector('.title')?.textContent||''}-${card.querySelector('.pill')?.textContent||''}`;
-}
-
-function focusCandidates(){
-  const doc=boardFrame.contentDocument;
-  if(!doc)return [];
-  const priorityRank={high:0,medium:1,low:2};
-  const laneRank={doing:0,next:1};
-  return [...doc.querySelectorAll('#doing .card:not(.done), #next .card:not(.done)')]
-    .map((card,index)=>{
-      const priority=['high','medium','low'].find(p=>card.querySelector(`.pill.${p}`))||'medium';
-      const lane=card.closest('.cards')?.id||'next';
-      return {
-        id:taskIdFromCard(card),card,index,priority,lane,
-        title:card.querySelector('.title')?.textContent?.trim()||'Untitled task',
-        category:card.querySelector('.meta .pill')?.textContent?.trim()||'Uncategorised',
-        notes:card.querySelector('.notes')?.textContent?.trim()||''
-      };
-    })
-    .filter(t=>!focusSkipped.has(t.id))
-    .sort((a,b)=>(priorityRank[a.priority]-priorityRank[b.priority])||(laneRank[a.lane]-laneRank[b.lane])||(a.index-b.index));
-}
-
-function showFocusTask(){
-  const candidates=focusCandidates();
-  focusTask=candidates[0]||null;
-  const empty=!focusTask;
-  focusContent.hidden=empty;
-  focusEmpty.hidden=!empty;
-  focusDone.hidden=empty;
-  focusSkip.hidden=empty;
-  focusCodex.hidden=empty;
-  focusHandoffStatus.textContent='';
-  if(empty)return;
-
-  focusTitle.textContent=focusTask.title;
-  focusMeta.innerHTML='';
-  [focusTask.priority+' priority',focusTask.lane==='doing'?'in progress':'next up',focusTask.category].forEach(text=>{
-    const pill=document.createElement('span');
-    pill.className='focus-pill';
-    pill.textContent=text;
-    focusMeta.appendChild(pill);
-  });
-  focusNotes.textContent=focusTask.notes||'No notes for this task.';
-}
-
-function buildCodexPrompt(task){
-  return `You are working inside my existing Sprite UEFN project. Implement the following project-board task now.\n\nTASK\n${task.title}\n\nPRIORITY\n${task.priority.toUpperCase()}\n\nBOARD STATUS\n${task.lane==='doing'?'IN PROGRESS':'NEXT UP'}\n\nCATEGORY\n${task.category}\n\nCONTEXT / NOTES\n${task.notes||'No extra notes were provided.'}\n\nWORKFLOW RULES\n1. Inspect the existing UEFN project, Verse, devices, UI and current implementation before changing anything.\n2. Implement the task rather than only explaining how to do it.\n3. Make the smallest safe change that completes this task and preserve all unrelated working systems.\n4. Reuse existing project patterns and naming where possible. Do not replace or simplify systems that are already working.\n5. If the task depends on something that already exists, verify that implementation first instead of rebuilding it.\n6. Compile/check Verse and perform any practical validation available to you.\n7. When finished, tell me exactly what changed, what I should test inside UEFN, and whether this board task can be marked Done.\n\nThis task came from my Sprite UEFN project board. Focus only on this task unless another change is strictly required for it to work.`;
-}
-
-async function copyCodexPrompt(text){
-  try{
-    await navigator.clipboard.writeText(text);
-    return true;
-  }catch(e){
-    const area=document.createElement('textarea');
-    area.value=text;area.style.position='fixed';area.style.opacity='0';
-    document.body.appendChild(area);area.select();
-    const ok=document.execCommand('copy');area.remove();
-    return ok;
-  }
-}
-
-function enterFocusMode(){
-  focusSkipped.clear();
-  document.body.classList.add('focus-active');
-  focusBackdrop.classList.add('open');
-  focusBackdrop.setAttribute('aria-hidden','false');
-  showFocusTask();
-}
-
-function exitFocusMode(){
-  document.body.classList.remove('focus-active');
-  focusBackdrop.classList.remove('open');
-  focusBackdrop.setAttribute('aria-hidden','true');
-  focusTask=null;
-  focusSkipped.clear();
-  focusHandoffStatus.textContent='';
-}
-
-focusLaunch.addEventListener('click',enterFocusMode);
-focusExit.addEventListener('click',exitFocusMode);
-focusSkip.addEventListener('click',()=>{
-  if(!focusTask)return;
-  focusSkipped.add(focusTask.id);
-  showFocusTask();
-});
-focusCodex.addEventListener('click',async()=>{
-  if(!focusTask)return;
-  const prompt=buildCodexPrompt(focusTask);
-  window.open('https://chatgpt.com/codex/open-app?app_brand=chatgpt','_blank','noopener,noreferrer');
-  const copied=await copyCodexPrompt(prompt);
-  focusHandoffStatus.textContent=copied?'Codex brief copied — paste it into the Codex task':'Codex opened — copy failed, try again';
-  const old=focusCodex.textContent;
-  focusCodex.textContent=copied?'✓ Brief Copied':'↗ Send to Codex';
-  if(copied)setTimeout(()=>{focusCodex.textContent=old;},1800);
-});
-focusDone.addEventListener('click',()=>{
-  if(!focusTask)return;
-  const checkbox=focusTask.card.querySelector('.check');
-  if(!checkbox)return;
-  focusSkipped.delete(focusTask.id);
-  checkbox.click();
-  setTimeout(showFocusTask,450);
-});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&focusBackdrop.classList.contains('open'))exitFocusMode()});
-boardFrame.addEventListener('load',()=>focusLaunch.classList.add('ready'));
+let focusTask=null,workflowTaskId=null,codexMode='implement';const focusSkipped=new Set();
+const $=id=>document.getElementById(id);
+function updateSystemClock(){const now=new Date();$('systemClockTime').textContent=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})}updateSystemClock();setInterval(updateSystemClock,1000);
+window.addEventListener('load',()=>{setTimeout(()=>$('boot')?.classList.add('hide'),1500);setTimeout(()=>$('boot')?.remove(),2050)});
+function loadTasks(){try{return JSON.parse(localStorage.getItem(BOARD_KEY)||'[]')||[]}catch{return []}}
+function saveTasks(tasks){localStorage.setItem(BOARD_KEY,JSON.stringify(tasks))}
+function loadFlow(){try{return JSON.parse(localStorage.getItem(FLOW_KEY)||'null')||{tasks:{},history:[],session:null}}catch{return{tasks:{},history:[],session:null}}}
+function saveFlow(f){localStorage.setItem(FLOW_KEY,JSON.stringify(f))}
+function meta(id,f=loadFlow()){return f.tasks[id]||(f.tasks[id]={estimate:30,dependencies:[],tests:[],testDone:[],codexResult:'',isBlocker:false,stage:'',bug:false})}
+function addHistory(type,id){const f=loadFlow();f.history.push({type,id,at:new Date().toISOString()});saveFlow(f)}
+function dayKey(d=new Date()){return d.toISOString().slice(0,10)}
+function openOverlay(id){document.body.classList.add('overlay-open');$(id).classList.add('open')}
+function closeOverlay(id){$(id).classList.remove('open');if(!document.querySelector('.overlay.open'))document.body.classList.remove('overlay-open')}
+window.closeOverlay=closeOverlay;
+function taskById(id){return loadTasks().find(t=>t.id===id)}
+function unresolvedDeps(id,tasks=loadTasks(),f=loadFlow()){const m=meta(id,f);return (m.dependencies||[]).filter(dep=>tasks.find(t=>t.id===dep)?.status!=='done')}
+function smartTasks(includeTesting=true){const tasks=loadTasks(),f=loadFlow(),session=f.session;const pRank={high:0,medium:1,low:2};return tasks.filter(t=>t.status!=='done'&&!focusSkipped.has(t.id)).filter(t=>!unresolvedDeps(t.id,tasks,f).length).filter(t=>!session?.active||session.queue.includes(t.id)).filter(t=>includeTesting||meta(t.id,f).stage!=='testing').sort((a,b)=>{const ma=meta(a.id,f),mb=meta(b.id,f);const sa=a.status==='doing'?0:ma.stage==='testing'?1:a.status==='todo'?2:3;const sb=b.status==='doing'?0:mb.stage==='testing'?1:b.status==='todo'?2:3;return sa-sb||Number(mb.isBlocker)-Number(ma.isBlocker)||(pRank[a.priority]??1)-(pRank[b.priority]??1)||(Number(ma.estimate)||30)-(Number(mb.estimate)||30)})}
+function setTaskStatus(id,status){const tasks=loadTasks(),t=tasks.find(x=>x.id===id);if(!t)return;t.status=status;saveTasks(tasks)}
+function markTesting(id){const f=loadFlow();meta(id,f).stage='testing';saveFlow(f);setTaskStatus(id,'doing');addHistory('testing_ready',id);reloadBoard()}
+function markDone(id,fromTest=false){const f=loadFlow();meta(id,f).stage='';saveFlow(f);setTaskStatus(id,'done');addHistory(fromTest?'tested_pass':'implemented',id);reloadBoard()}
+function failTesting(id){const f=loadFlow();meta(id,f).stage='';saveFlow(f);setTaskStatus(id,'doing');addHistory('tested_fail',id);reloadBoard()}
+function reloadBoard(){boardFrame.contentWindow.location.reload();setTimeout(()=>{if($('focusOverlay').classList.contains('open'))showFocusTask()},500)}
+function taskIdFromCard(card){const h=card.querySelector('.check')?.getAttribute('onchange')||'';return h.match(/toggleDone\('([^']+)'/)?.[1]||''}
+function injectStyle(doc){if(doc.getElementById('workflowRuntimeStyle'))return;const s=doc.createElement('style');s.id='workflowRuntimeStyle';s.textContent=`
+.board{grid-template-columns:repeat(4,minmax(0,1fr))!important}.workflow-testing{border-color:rgba(94,231,255,.28)!important}.workflow-testing:before{background:linear-gradient(90deg,transparent,#5ee7ff,#58f7b2,transparent)!important}.workflow-testing .colhead{color:#c9f7ff}.wf-cardline{display:flex;gap:5px;flex-wrap:wrap;margin:8px 26px 0 29px}.wf-tag{font-size:9px;border:1px solid rgba(94,231,255,.24);border-radius:99px;padding:3px 6px;color:#a8deea;background:rgba(94,231,255,.03)}.wf-tag.blocked{color:#ffc2cb;border-color:rgba(255,93,117,.35)}.wf-controls{display:flex;gap:5px;margin:8px 26px 0 29px;flex-wrap:wrap}.wf-mini{border:1px solid rgba(255,126,64,.2);background:#0b0c0d;color:#b9aaa0;padding:5px 7px;border-radius:7px;font-size:9px;font-weight:850;cursor:pointer}.wf-mini:hover{border-color:#ffc247;color:#ffe29a}.wf-mini.test{border-color:rgba(94,231,255,.3);color:#bcefff}.wf-mini.pass{border-color:rgba(88,247,178,.32);color:#baffdf}.wf-mini.fail{border-color:rgba(255,93,117,.3);color:#ffc4cd}.wf-dashboard{margin:14px 0;display:grid;grid-template-columns:1.2fr 1fr;gap:12px}.wf-panel{background:linear-gradient(180deg,rgba(14,17,19,.92),rgba(7,9,10,.95));border:1px solid rgba(255,107,46,.2);border-radius:14px;padding:14px}.wf-panel h3{margin:0 0 9px;font-size:12px;color:#ffe2bb;letter-spacing:.08em;text-transform:uppercase}.wf-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.wf-kpi{padding:8px;border:1px solid rgba(255,126,64,.14);border-radius:9px;text-align:center}.wf-kpi b{display:block;font-size:20px;color:#fff4e5}.wf-kpi span{font-size:8px;color:#9e8d81;text-transform:uppercase}.ready-row{display:grid;grid-template-columns:75px 1fr 38px;gap:7px;align-items:center;margin:6px 0;font-size:9px;color:#a9988c}.ready-track{height:5px;background:#211411;border-radius:99px;overflow:hidden}.ready-fill{height:100%;background:linear-gradient(90deg,#ff3b1f,#ff8b2d,#ffc247)}.session-queue{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.session-chip{font-size:9px;padding:5px 7px;border:1px solid rgba(94,231,255,.23);border-radius:8px;color:#bcefff}.session-chip.now{border-color:#ffc247;color:#ffe29a}.quick-actions{display:flex;gap:7px;flex-wrap:wrap}.quick-actions .btn{padding:9px 11px}@media(max-width:1050px){.board{grid-template-columns:repeat(2,minmax(0,1fr))!important}.wf-dashboard{grid-template-columns:1fr}}@media(max-width:680px){.board{grid-template-columns:1fr!important}.wf-kpis{grid-template-columns:repeat(2,1fr)}}`;doc.head.appendChild(s)}
+function enhanceBoard(){const doc=boardFrame.contentDocument;if(!doc)return;injectStyle(doc);const board=doc.querySelector('.board');if(!board)return;let testing=doc.getElementById('workflow-testing');if(!testing){testing=doc.createElement('section');testing.className='col workflow-testing';testing.id='workflow-testing';testing.innerHTML='<div class="colhead">NEEDS TESTING <span class="count" id="count-testing">0</span></div><div class="cards" id="testing"></div>';const done=doc.getElementById('done')?.closest('.col');board.insertBefore(testing,done||null)}
+const tasks=loadTasks(),f=loadFlow();let testCount=0;doc.querySelectorAll('.card').forEach(card=>{const id=taskIdFromCard(card);if(!id)return;const t=tasks.find(x=>x.id===id),m=meta(id,f);if(!t)return;const blocked=unresolvedDeps(id,tasks,f);if(m.stage==='testing'){testing.querySelector('.cards').appendChild(card);testCount++}let line=card.querySelector('.wf-cardline');if(!line){line=doc.createElement('div');line.className='wf-cardline';card.appendChild(line)}line.innerHTML='';if(blocked.length){const x=doc.createElement('span');x.className='wf-tag blocked';x.textContent=`BLOCKED ×${blocked.length}`;line.appendChild(x)}if(m.isBlocker){const x=doc.createElement('span');x.className='wf-tag';x.textContent='BLOCKER';line.appendChild(x)}if(m.tests?.length){const x=doc.createElement('span');x.className='wf-tag';x.textContent=`TESTS ${m.testDone?.filter(Boolean).length||0}/${m.tests.length}`;line.appendChild(x)}if(m.codexResult){const x=doc.createElement('span');x.className='wf-tag';x.textContent='CODEX RESULT';line.appendChild(x)}if(m.bug){const x=doc.createElement('span');x.className='wf-tag blocked';x.textContent='BUG';line.appendChild(x)}let controls=card.querySelector('.wf-controls');if(!controls){controls=doc.createElement('div');controls.className='wf-controls';card.appendChild(controls)}controls.innerHTML=`<button class="wf-mini" onclick="parent.workflowOpen('${id}')">⚙ Workflow</button>${m.stage==='testing'?`<button class="wf-mini pass" onclick="parent.workflowPass('${id}')">✓ Pass</button><button class="wf-mini fail" onclick="parent.workflowFail('${id}')">× Fail</button>`:`<button class="wf-mini test" onclick="parent.workflowTesting('${id}')">🧪 Test</button>`}`});
+const ct=doc.getElementById('count-testing');if(ct)ct.textContent=testCount;injectDashboard(doc,tasks,f);injectQuickActions(doc)}
+function injectQuickActions(doc){const a=doc.querySelector('.top .actions');if(!a||doc.getElementById('workflowBugBtn'))return;const bug=doc.createElement('button');bug.id='workflowBugBtn';bug.className='btn danger';bug.textContent='🐛 Quick Bug';bug.onclick=()=>parent.openBugCapture();const ses=doc.createElement('button');ses.className='btn';ses.textContent='⏱ Start Session';ses.onclick=()=>parent.openSession();a.prepend(ses);a.prepend(bug)}
+function readiness(tasks,cats){const set=tasks.filter(t=>cats.includes(t.category)&&t.status!=='idea');if(!set.length)return 0;return Math.round(set.filter(t=>t.status==='done').length/set.length*100)}
+function injectDashboard(doc,tasks,f){let d=doc.getElementById('workflowDashboard');if(!d){d=doc.createElement('div');d.id='workflowDashboard';d.className='wf-dashboard';const toolbar=doc.querySelector('.toolbar');toolbar.parentNode.insertBefore(d,toolbar)}const today=dayKey(),hist=(f.history||[]).filter(h=>h.at?.slice(0,10)===today);const implemented=hist.filter(h=>['implemented','tested_pass'].includes(h.type)).length,tested=hist.filter(h=>['tested_pass','tested_fail'].includes(h.type)).length,bugs=hist.filter(h=>h.type==='bug_capture').length;const testing=tasks.filter(t=>meta(t.id,f).stage==='testing').length;const groups=[['GAMEPLAY',['Core Gameplay','Abilities']],['MAP',['Map Flow']],['UI',['UI & UX']],['TESTING',['Testing & Persistence']],['POLISH',['Sprite Assets','Collection & Eggs']]];const active=f.session?.active&&f.session.endsAt>Date.now();let queue='';if(active){const names=f.session.queue.map(id=>tasks.find(t=>t.id===id)).filter(Boolean).filter(t=>t.status!=='done');queue='<div class="session-queue">'+names.slice(0,4).map((t,i)=>`<span class="session-chip ${i===0?'now':''}">${i===0?'NOW':i===1?'NEXT':'AFTER'} · ${escapeHtml(t.title)}</span>`).join('')+'</div>'}d.innerHTML=`<div class="wf-panel"><h3>TODAY // EXECUTION</h3><div class="wf-kpis"><div class="wf-kpi"><b>${implemented}</b><span>Implemented</span></div><div class="wf-kpi"><b>${tested}</b><span>Tested</span></div><div class="wf-kpi"><b>${bugs}</b><span>Bugs logged</span></div><div class="wf-kpi"><b>${testing}</b><span>Needs test</span></div></div>${active?`<div class="subtle" style="margin-top:9px">SESSION ACTIVE · ${Math.max(0,Math.ceil((f.session.endsAt-Date.now())/60000))} MIN LEFT</div>${queue}`:''}</div><div class="wf-panel"><h3>SHIP READINESS</h3>${groups.map(([n,c])=>{const p=readiness(tasks,c);return `<div class="ready-row"><span>${n}</span><div class="ready-track"><div class="ready-fill" style="width:${p}%"></div></div><b>${p}%</b></div>`}).join('')}</div>`}
+function escapeHtml(s=''){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+boardFrame.addEventListener('load',()=>{setTimeout(()=>{enhanceBoard();$('focusLaunch').classList.add('ready')},80);setTimeout(enhanceBoard,500)});
+function showFocusTask(){const list=smartTasks(true);focusTask=list[0]||null;const empty=!focusTask;$('focusContent').hidden=empty;$('focusEmpty').hidden=!empty;$('codexModes').hidden=empty;['focusSkip','focusDetails','focusCodex','focusTesting','focusDone'].forEach(id=>$(id).hidden=empty);$('focusStatus').textContent='';if(empty)return;const f=loadFlow(),m=meta(focusTask.id,f),deps=unresolvedDeps(focusTask.id,loadTasks(),f);$('focusTitle').textContent=focusTask.title;$('focusMeta').innerHTML='';[focusTask.priority+' priority',m.stage==='testing'?'needs testing':focusTask.status==='doing'?'in progress':'next up',focusTask.category,m.isBlocker?'blocks other work':`${m.estimate||30} min`].forEach(text=>{const x=document.createElement('span');x.className='pill';x.textContent=text;$('focusMeta').appendChild(x)});$('focusNotes').textContent=focusTask.notes||'No notes for this task.';$('focusTests').innerHTML=m.stage==='testing'&&m.tests?.length?m.tests.map((t,i)=>`<label class="test-row"><input type="checkbox" ${m.testDone?.[i]?'checked':''} onchange="workflowToggleTest('${focusTask.id}',${i},this.checked)"><span>${escapeHtml(t)}</span></label>`).join(''):''}
+function enterFocus(){focusSkipped.clear();document.body.classList.add('focus-active');openOverlay('focusOverlay');showFocusTask()}
+function exitFocus(){closeOverlay('focusOverlay');document.body.classList.remove('focus-active');focusTask=null;focusSkipped.clear()}
+$('focusLaunch').onclick=enterFocus;$('focusExit').onclick=exitFocus;$('focusSkip').onclick=()=>{if(focusTask){focusSkipped.add(focusTask.id);showFocusTask()}};$('focusDetails').onclick=()=>{if(focusTask)workflowOpen(focusTask.id)};$('focusTesting').onclick=()=>{if(focusTask)markTesting(focusTask.id)};$('focusDone').onclick=()=>{if(focusTask)markDone(focusTask.id,false)};
+document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{codexMode=b.dataset.mode;document.querySelectorAll('.mode').forEach(x=>x.classList.toggle('active',x===b))});
+function buildCodexPrompt(t){const f=loadFlow(),m=meta(t.id,f);const modeText={implement:'Implement this task now.',debug:'Debug the existing implementation, find the root cause, and fix it.',polish:'Polish the existing implementation without changing its intended behaviour.',investigate:'Investigate this task first, identify the safest implementation path, then make the change if the evidence is clear.'}[codexMode];return `You are working inside my existing Sprite UEFN project. ${modeText}\n\nTASK\n${t.title}\n\nPRIORITY\n${t.priority.toUpperCase()}\n\nCATEGORY\n${t.category}\n\nCONTEXT / NOTES\n${t.notes||'No extra notes were provided.'}\n\nESTIMATED EFFORT\n${m.estimate||30} minutes\n\nUEFN ACCEPTANCE TESTS\n${m.tests?.length?m.tests.map((x,i)=>`${i+1}. ${x}`).join('\n'):'No explicit tests saved yet. Propose a concise test checklist in your final response.'}\n\nWORKFLOW RULES\n1. Inspect the existing UEFN project, Verse, devices, UI and current implementation before changing anything.\n2. Do the work rather than only explaining it.\n3. Make the smallest safe change that completes this task and preserve unrelated working systems.\n4. Reuse existing project patterns and naming. Never replace or simplify working systems unnecessarily.\n5. Verify dependencies and existing implementation before rebuilding anything.\n6. Compile/check Verse and perform practical validation available to you.\n7. End with: CHANGED, FILES/SYSTEMS TOUCHED, UEFN TEST CHECKLIST, KNOWN RISKS, and READY FOR TESTING: YES/NO.\n\nFocus only on this task unless another change is strictly required.`}
+async function copyText(text){try{await navigator.clipboard.writeText(text);return true}catch{const a=document.createElement('textarea');a.value=text;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();const ok=document.execCommand('copy');a.remove();return ok}}
+$('focusCodex').onclick=async()=>{if(!focusTask)return;const ok=await copyText(buildCodexPrompt(focusTask));setTaskStatus(focusTask.id,'doing');addHistory('codex_handoff',focusTask.id);window.open('https://chatgpt.com/codex/open-app?app_brand=chatgpt','_blank','noopener,noreferrer');$('focusStatus').textContent=ok?`${codexMode} brief copied — paste into Codex`:'Codex opened — clipboard copy failed';reloadBoard()};
+function workflowOpen(id){workflowTaskId=id;const t=taskById(id);if(!t)return;const f=loadFlow(),m=meta(id,f);$('wfTitle').textContent=t.title;$('wfEstimate').value=String(m.estimate||30);$('wfBlocker').value=m.isBlocker?'1':'0';$('wfTests').value=(m.tests||[]).join('\n');$('wfCodexResult').value=m.codexResult||'';const all=loadTasks().filter(x=>x.id!==id&&x.status!=='idea');$('wfDeps').innerHTML=all.map(x=>`<option value="${x.id}" ${(m.dependencies||[]).includes(x.id)?'selected':''}>${escapeHtml(x.status==='done'?'✓ '+x.title:x.title)}</option>`).join('');openOverlay('workflowOverlay')}
+window.workflowOpen=workflowOpen;
+$('wfSave').onclick=()=>{if(!workflowTaskId)return;const f=loadFlow(),m=meta(workflowTaskId,f);m.estimate=Number($('wfEstimate').value);m.isBlocker=$('wfBlocker').value==='1';m.dependencies=[...$('wfDeps').selectedOptions].map(o=>o.value);m.tests=$('wfTests').value.split('\n').map(x=>x.trim()).filter(Boolean);m.testDone=m.tests.map((_,i)=>Boolean(m.testDone?.[i]));m.codexResult=$('wfCodexResult').value.trim();saveFlow(f);closeOverlay('workflowOverlay');reloadBoard()};
+$('wfToTesting').onclick=()=>{if(!workflowTaskId)return;const f=loadFlow(),m=meta(workflowTaskId,f);m.estimate=Number($('wfEstimate').value);m.isBlocker=$('wfBlocker').value==='1';m.dependencies=[...$('wfDeps').selectedOptions].map(o=>o.value);m.tests=$('wfTests').value.split('\n').map(x=>x.trim()).filter(Boolean);m.testDone=m.tests.map((_,i)=>Boolean(m.testDone?.[i]));m.codexResult=$('wfCodexResult').value.trim();m.stage='testing';saveFlow(f);setTaskStatus(workflowTaskId,'doing');addHistory('testing_ready',workflowTaskId);closeOverlay('workflowOverlay');reloadBoard()};
+function workflowToggleTest(id,i,on){const f=loadFlow(),m=meta(id,f);m.testDone=m.testDone||[];m.testDone[i]=on;saveFlow(f);enhanceBoard()}window.workflowToggleTest=workflowToggleTest;
+function workflowPass(id){const f=loadFlow(),m=meta(id,f);if(m.tests?.length&&!m.tests.every((_,i)=>m.testDone?.[i])){workflowOpen(id);return}markDone(id,true)}window.workflowPass=workflowPass;
+function workflowFail(id){failTesting(id)}window.workflowFail=workflowFail;window.workflowTesting=markTesting;
+function openBugCapture(){$('bugTitle').value='';$('bugNotes').value='';$('bugPriority').value='high';$('bugEstimate').value='30';openOverlay('bugOverlay');setTimeout(()=>$('bugTitle').focus(),50)}window.openBugCapture=openBugCapture;
+$('bugSave').onclick=()=>{const title=$('bugTitle').value.trim();if(!title)return $('bugTitle').focus();const tasks=loadTasks();const id=Date.now().toString(36)+Math.random().toString(36).slice(2,7);tasks.unshift({id,title:'BUG // '+title,category:'Testing & Persistence',status:'todo',priority:$('bugPriority').value,notes:$('bugNotes').value.trim()});saveTasks(tasks);const f=loadFlow(),m=meta(id,f);m.bug=true;m.estimate=Number($('bugEstimate').value);f.history.push({type:'bug_capture',id,at:new Date().toISOString()});saveFlow(f);closeOverlay('bugOverlay');reloadBoard()};
+function openSession(){openOverlay('sessionOverlay')}window.openSession=openSession;
+document.querySelectorAll('.session-choice').forEach(b=>b.onclick=()=>startSession(Number(b.dataset.min)));
+function startSession(minutes){const candidates=smartTasks(true),queue=[];let used=0;for(const t of candidates){const est=Number(meta(t.id).estimate)||30;if(queue.length&&used+est>minutes+30)continue;queue.push(t.id);used+=est;if(used>=minutes)break}const f=loadFlow();f.session={active:true,startedAt:Date.now(),endsAt:Date.now()+minutes*60000,durationMin:minutes,queue};saveFlow(f);closeOverlay('sessionOverlay');reloadBoard();setTimeout(enterFocus,550)}
+setInterval(()=>{const f=loadFlow();if(f.session?.active&&f.session.endsAt<=Date.now()){f.session.active=false;saveFlow(f);enhanceBoard()}},30000);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){['workflowOverlay','bugOverlay','sessionOverlay'].forEach(id=>closeOverlay(id));if($('focusOverlay').classList.contains('open'))exitFocus()}});
 </script>
 </body>
 </html>
