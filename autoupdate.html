@@ -9,7 +9,98 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020304;fon
 </style>
 </head>
 <body>
-<iframe src="/daily.html" title="Sprite Operations Board"></iframe>
-<div class="deploy-badge">● AUTO-UPDATE TEST // LIVE</div>
+<iframe id="app" title="Sprite Operations Board"></iframe>
+<div class="deploy-badge">● SEP 10 AUDIT // SYNCED</div>
+<script>
+const BOARD_KEY='sprite-uefn-board-v1';
+const FLOW_KEY='sprite-uefn-workflow-v2';
+const LOG_KEY='sprite-uefn-daily-work-log-v2';
+const MIGRATION_KEY='sprite-uefn-audit-2026-09-10-v1';
+const REPORT_DATE='2026-09-10';
+
+const report={
+  summary:'Major progression/UI session: the native XP HUD, 10-level colour system, animated border treatment, smooth local fill, Burbank XP text, multiplier cleanup, instant click handling and harder XP curve were implemented. The project is now primarily in validation/polish for reward timing, rapid clicking, level transitions, rebirth and world unlock behaviour.',
+  completed:[
+    {title:'Native Level / XP HUD',note:'Custom fixed-size UMG/material HUD with dark bar, coloured frame, animated fill, pointed end-cap, centred XP text and level label.'},
+    {title:'10-level colour system',note:'Red, Blue, Pink, Purple, Green, Yellow, Cyan, Orange, Silver, Rainbow; gold for rebirth-ready.'},
+    {title:'Animated level border treatment',note:'Subtle energy/fire-like edge animation that follows the active level colour; seen in-game.'},
+    {title:'Smooth client-side XP fill',note:'Fill interpolation moved from per-frame Verse work into local UMG/material animation; substantially smoother in Fortnite.'},
+    {title:'XP bar sizing and layout pass',note:'Bar made slightly narrower/taller, moved lower, and prevented from growing in width on click.'},
+    {title:'Burbank XP typography',note:'Dynamic XP values render inside the bar with stronger outline and final compact sizing.'},
+    {title:'Multiplier HUD cleanup',note:'Removed Sprite/Boost labels; Rebirth and VIP now sit symmetrically beneath the XP bar.'},
+    {title:'Full-fill pointed end-cap fix',note:'Completed level now fills all the way through the arrow/end-cap.'},
+    {title:'Original click reward restored',note:'Themed badge experiment removed; live reward is back to flame + +1.'},
+    {title:'Immediate click handling',note:'Old 0.09s click-rate gate removed; accepted clicks immediately add power, show reward and trigger sound.'},
+    {title:'Harder XP progression curve',note:'Level requirements set to 25, 40, 60, 85, 115, 150, 190, 235, 285, 350.'},
+    {title:'Rebirth preserves world progress',note:'Rebirth resets repeatable progression but does not remove unlocked worlds.'},
+    {title:'World 2 unlock target set',note:'World 2 is currently designed to unlock at 4 rebirths.'}
+  ],
+  inProgress:[
+    {title:'Validate reward arrival timing',note:'Power is instant, but visible XP fill waits ~1.125s for the travelling reward to reach the HUD.'},
+    {title:'Rapid clicking + audio stress test',note:'Spam click for 30–60s and confirm no missed clicks, broken sound restarts or unpleasant overlap.'},
+    {title:'Popup overlap regression test',note:'Eight popup variants/randomised paths are implemented; verify readability under fast clicking.'},
+    {title:'Final XP text + multiplier alignment check',note:'Latest compact text and inner-edge multiplier alignment compiled/activated but need final Fortnite verification.'},
+    {title:'Level-transition playtest',note:'Verify full end-cap fill, pause, colour transition and several real level-ups including Level 10.'},
+    {title:'Rebirth-ready end-to-end test',note:'Verify Level 10 completion → gold state → click rebirth → reset sequence.'},
+    {title:'World 2 gate regression test',note:'Confirm 4 rebirths unlock World 2 and rebirth never removes unlocked worlds.'},
+    {title:'Arena/slime regression pass',note:'Run an end-to-end Arena 1 session after the new progression changes, including slime behaviour and visuals.'}
+  ],
+  newTasks:[
+    {title:'Capture final verified gameplay media',note:'Take screenshots/video for the project board after the HUD passes validation.'},
+    {title:'Verify all UMG/device bindings after refresh',note:'XP HUD/material, click sound, level-up sound, rebirth region, start/fight/win zones.'},
+    {title:'Clean unused click-reward experiment assets',note:'Remove optional abandoned assets/scripts after confirming the restored flame + +1 popup is final.'},
+    {title:'Replicate validated Arena 1 pattern into later worlds',note:'Build future worlds/arenas only after Arena 1 is fully validated.'},
+    {title:'Define Sprite abilities before returning to Niagara',note:'Future VFX should support finished gameplay abilities rather than be built in isolation.'},
+    {title:'Keep orbit-ring Niagara effect deferred',note:'Earlier ring concept was intentionally abandoned due to centring/replacement/fade issues.'},
+    {title:'Progression validation pass before more visual rewrites',note:'Current priority is testing and polish, not another HUD redesign.'}
+  ],
+  notes:'Key decisions: progression is now the main loop (click → XP → level → rebirth); power updates instantly while visible XP waits for reward arrival; rebirth preserves world access; World 2 targets 4 rebirths; UI direction is clean Fortnite-style neon with restrained animation; combat remains click-near-enemy; Niagara work stays deferred until Sprite abilities are established.'
+};
+
+const doneTasks=report.completed.map((x,i)=>({title:x.title,category:i===9?'Core Gameplay':i>=10?'Core Gameplay':'UI & UX',status:'done',priority:i>=9?'high':'medium',notes:x.note}));
+const testingTasks=report.inProgress.map((x,i)=>({title:x.title,category:'Testing & Persistence',status:'doing',priority:i<7?'high':'medium',notes:x.note,tests:[x.note]}));
+const todoTasks=[
+  {title:'Capture final verified gameplay media',category:'UI & UX',status:'todo',priority:'low',notes:'Capture screenshots/video only after the progression HUD and rebirth flow pass validation.'},
+  {title:'Verify all UMG/device bindings after refresh',category:'Testing & Persistence',status:'todo',priority:'high',notes:'Confirm XP HUD/material, click sound, level-up sound, rebirth action area and start/fight/win mutator zones remain assigned.'},
+  {title:'Clean unused click-reward experiment assets',category:'UI & UX',status:'todo',priority:'low',notes:'Delete optional abandoned popup experiment assets/scripts after confirming flame + +1 is final.'},
+  {title:'Replicate Arena 1 pattern into later worlds',category:'Map Flow',status:'todo',priority:'medium',notes:'Use the validated Arena 1 structure for later worlds/arenas.'},
+  {title:'Define Sprite abilities before more Niagara VFX',category:'Abilities',status:'todo',priority:'high',notes:'Return to Sprite-specific Niagara only after each gameplay ability is established.'},
+  {title:'Keep orbit-ring Niagara effect deferred',category:'Sprite Assets',status:'todo',priority:'low',notes:'Do not revisit the abandoned two-ring orbit effect unless a future ability specifically needs it.'},
+  {title:'Progression validation pass before more visual rewrites',category:'Testing & Persistence',status:'todo',priority:'high',notes:'Prioritise validation/polish of the current progression HUD before redesigning it again.'}
+];
+
+function saveReport(){
+  let logs={};try{logs=JSON.parse(localStorage.getItem(LOG_KEY)||'{}')||{}}catch{}
+  logs[REPORT_DATE]=report;localStorage.setItem(LOG_KEY,JSON.stringify(logs));
+}
+function makeId(i){return `audit-20260910-${String(i+1).padStart(2,'0')}`}
+function migrateBoard(attempt=0){
+  saveReport();
+  if(localStorage.getItem(MIGRATION_KEY))return;
+  let tasks=[];try{tasks=JSON.parse(localStorage.getItem(BOARD_KEY)||'[]')||[]}catch{}
+  if(!tasks.length){if(attempt<12)setTimeout(()=>migrateBoard(attempt+1),500);return}
+  let flow={tasks:{},history:[],session:null};try{flow=JSON.parse(localStorage.getItem(FLOW_KEY)||'null')||flow}catch{}
+  flow.tasks=flow.tasks||{};flow.history=flow.history||[];
+  const all=[...doneTasks,...testingTasks,...todoTasks];
+  all.forEach((item,i)=>{
+    let t=tasks.find(x=>x.title===item.title);
+    if(!t){t={id:makeId(i),title:item.title,category:item.category,status:item.status,priority:item.priority,notes:item.notes};tasks.push(t)}
+    else{
+      t.category=item.category||t.category;t.priority=item.priority||t.priority;t.notes=item.notes||t.notes;
+      if(item.status==='done')t.status='done';
+      else if(item.status==='doing'&&t.status!=='done')t.status='doing';
+    }
+    if(item.tests){const m=flow.tasks[t.id]||(flow.tasks[t.id]={estimate:30,dependencies:[],tests:[],testDone:[],codexResult:'',isBlocker:false,stage:'',bug:false});m.stage='testing';m.tests=item.tests;m.testDone=item.tests.map(()=>false);m.codexResult='Implemented in Sep 10 Codex session; awaiting live validation.'}
+  });
+  localStorage.setItem(BOARD_KEY,JSON.stringify(tasks));
+  localStorage.setItem(FLOW_KEY,JSON.stringify(flow));
+  localStorage.setItem(MIGRATION_KEY,'1');
+  setTimeout(()=>{document.getElementById('app').contentWindow.location.reload()},250);
+}
+
+saveReport();
+document.getElementById('app').src='/daily.html?audit=20260910';
+setTimeout(()=>migrateBoard(),900);
+</script>
 </body>
 </html>
