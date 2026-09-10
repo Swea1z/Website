@@ -1,5 +1,5 @@
 {
   "redirects": [
-    { "source": "/", "destination": "/daily.html", "permanent": false }
+    { "source": "/", "destination": "/autoupdate.html", "permanent": false }
   ]
 }
