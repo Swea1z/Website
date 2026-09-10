@@ -1,5 +1,5 @@
 {
-  "rewrites": [
-    { "source": "/", "destination": "/daily.html" }
+  "redirects": [
+    { "source": "/", "destination": "/daily.html", "permanent": false }
   ]
 }
