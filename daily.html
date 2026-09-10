@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sprite UEFN Operations Board</title>
+<style>
+:root{--red:#ff3b1f;--orange:#ff8b2d;--gold:#ffc247;--gold2:#ffe29a;--cyan:#5ee7ff;--green:#58f7b2;--text:#fff7eb;--muted:#b7aaa0}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#020304;overflow:hidden;font-family:Inter,Arial,sans-serif;color:var(--text)}
+#app{position:fixed;inset:0;width:100%;height:100%;border:0;background:#020304}
+.daily-launch{position:fixed;right:22px;top:118px;z-index:5000;border:1px solid rgba(94,231,255,.42);border-radius:11px;padding:10px 13px;background:linear-gradient(180deg,rgba(13,28,32,.96),rgba(7,12,14,.98));color:#cff8ff;font-weight:950;letter-spacing:.06em;box-shadow:0 0 20px rgba(94,231,255,.09);cursor:pointer;transition:.18s ease}.daily-launch:hover{transform:translateY(-1px);border-color:#5ee7ff;box-shadow:0 0 26px rgba(94,231,255,.17)}
+.overlay{display:none;position:fixed;inset:0;z-index:6000;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 50% 42%,rgba(255,87,30,.15),rgba(0,0,0,.62) 46%,rgba(0,0,0,.88));backdrop-filter:blur(6px)}.overlay.open{display:flex}
+.panel{width:min(860px,95vw);max-height:88vh;overflow:auto;padding:24px;border-radius:20px;border:1px solid rgba(255,194,71,.46);background:radial-gradient(circle at 92% 4%,rgba(94,231,255,.055),transparent 28%),linear-gradient(180deg,rgba(20,22,24,.995),rgba(7,8,9,.998));box-shadow:0 30px 110px #000e,0 0 55px rgba(255,84,30,.14),inset 0 0 35px rgba(255,194,71,.035);position:relative}.panel:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),var(--gold),var(--cyan),transparent)}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:14px;border-bottom:1px solid rgba(255,122,55,.18)}.kicker{color:var(--gold);font-size:10px;font-weight:1000;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px}.title{font-size:30px;font-weight:1000;letter-spacing:-.02em}.date{color:#d9c6b8;font-size:12px;margin-top:4px;letter-spacing:.05em}.close{border:0;background:transparent;color:#a99789;font-size:25px;cursor:pointer}.close:hover{color:#fff}
+.summary{margin:16px 0;padding:14px;border:1px solid rgba(94,231,255,.16);border-radius:12px;background:rgba(94,231,255,.025);color:#d4c7bd;line-height:1.6}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px}.stat{padding:12px;border:1px solid rgba(255,116,49,.17);border-radius:11px;background:#0a0c0d}.stat span{display:block;color:#9c8c81;font-size:9px;font-weight:900;letter-spacing:.11em;text-transform:uppercase}.stat b{display:block;font-size:25px;margin-top:2px;color:#fff2df}
+.section{margin-top:16px}.section-title{color:var(--gold);font-size:10px;font-weight:1000;letter-spacing:.15em;margin-bottom:8px}.list{display:flex;flex-direction:column;gap:7px}.item{display:grid;grid-template-columns:10px 1fr;gap:9px;padding:11px 12px;border:1px solid rgba(255,120,54,.14);border-radius:10px;background:linear-gradient(180deg,rgba(19,20,21,.94),rgba(9,10,11,.98))}.dot{width:7px;height:7px;border-radius:50%;margin-top:6px;background:#998a7f;box-shadow:0 0 9px currentColor}.item.completed .dot{background:var(--green)}.item.progress .dot{background:var(--gold)}.item.new .dot{background:var(--cyan)}.item b{color:#f9eee4}.item small{display:block;color:#a5968c;font-size:12px;line-height:1.5;margin-top:3px}.empty,.notes{padding:11px 12px;border:1px dashed rgba(255,120,53,.16);border-radius:10px;color:#a5968c;font-size:12px;line-height:1.55}
+.actions{display:flex;justify-content:flex-end;margin-top:18px}.btn{border:1px solid rgba(255,126,64,.34);background:#111214;color:#fff7eb;padding:10px 14px;border-radius:10px;font-weight:900;cursor:pointer}.btn:hover{border-color:#ffc247}
+@media(max-width:720px){.daily-launch{right:14px;top:70px;font-size:11px}.panel{padding:18px}.stats{grid-template-columns:1fr}.title{font-size:24px}}
+</style>
+</head>
+<body>
+<iframe id="app" src="/index.html" title="Sprite Operations Board"></iframe>
+<button class="daily-launch" type="button" onclick="openBriefing()">◷ Previous Day Work</button>
+<div id="briefing" class="overlay" role="dialog" aria-modal="true">
+  <section class="panel">
+    <div class="head"><div><div class="kicker">STARK BUILD INTELLIGENCE</div><div class="title">PREVIOUS DAY // BUILD REPORT</div><div id="reportDate" class="date"></div></div><button class="close" onclick="closeBriefing()">×</button></div>
+    <div id="reportSummary" class="summary"></div>
+    <div class="stats"><div class="stat"><span>Completed</span><b id="completedCount">0</b></div><div class="stat"><span>In Progress</span><b id="progressCount">0</b></div><div class="stat"><span>New Tasks</span><b id="newCount">0</b></div></div>
+    <div class="section"><div class="section-title">SYSTEMS BROUGHT ONLINE</div><div id="completedList" class="list"></div></div>
+    <div class="section"><div class="section-title">STILL IN DEVELOPMENT</div><div id="progressList" class="list"></div></div>
+    <div class="section"><div class="section-title">NEWLY IDENTIFIED / ADDED</div><div id="newList" class="list"></div></div>
+    <div id="notesSection" class="section"><div class="section-title">BUILD NOTES</div><div id="reportNotes" class="notes"></div></div>
+    <div class="actions"><button class="btn" onclick="closeBriefing()">Close Briefing</button></div>
+  </section>
+</div>
+<script>
+const SEEN_KEY='sprite-uefn-daily-briefing-seen-v2';
+const LOCAL_LOG_KEY='sprite-uefn-daily-work-log-v2';
+const BUILT_IN_REPORTS={
+  '2026-09-09':{
+    summary:'Daily build reporting is now connected to the live operations board. The Sep 9 entry is intentionally a setup note because the saved Codex export did not provide reliable per-message timestamps for a date-accurate reconstruction.',
+    completed:[],inProgress:[],newTasks:[],
+    notes:"From your next nightly request onward, I can audit the 'Explain Fortnite sprites' Codex chat, update the board checklist, and add that day's exact report here for the following morning."
+  }
+};
+function localISO(d=new Date()){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
+function previousDate(){const d=new Date();d.setDate(d.getDate()-1);return localISO(d)}
+function prettyDate(iso){const [y,m,d]=iso.split('-').map(Number);return new Date(y,m-1,d).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+function esc(s=''){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function reports(){let local={};try{local=JSON.parse(localStorage.getItem(LOCAL_LOG_KEY)||'{}')||{}}catch{}return {...BUILT_IN_REPORTS,...local}}
+function renderItems(items,type){if(!items?.length)return '<div class="empty">Nothing logged in this section for this day.</div>';return items.map(x=>{const t=typeof x==='string'?x:x.title,n=typeof x==='string'?'':(x.note||x.notes||'');return `<div class="item ${type}"><span class="dot"></span><div><b>${esc(t)}</b>${n?`<small>${esc(n)}</small>`:''}</div></div>`}).join('')}
+function openBriefing(date=previousDate()){const r=reports()[date]||{summary:'No nightly build report has been saved for this date yet.',completed:[],inProgress:[],newTasks:[],notes:"When you finish working, tell me to audit the 'Explain Fortnite sprites' Codex chat and update the previous-day report."};document.getElementById('reportDate').textContent=prettyDate(date);document.getElementById('reportSummary').textContent=r.summary||'';document.getElementById('completedCount').textContent=(r.completed||[]).length;document.getElementById('progressCount').textContent=(r.inProgress||[]).length;document.getElementById('newCount').textContent=(r.newTasks||[]).length;document.getElementById('completedList').innerHTML=renderItems(r.completed,'completed');document.getElementById('progressList').innerHTML=renderItems(r.inProgress,'progress');document.getElementById('newList').innerHTML=renderItems(r.newTasks,'new');document.getElementById('reportNotes').textContent=r.notes||'';document.getElementById('notesSection').style.display=r.notes?'block':'none';document.getElementById('briefing').classList.add('open')}
+function closeBriefing(){document.getElementById('briefing').classList.remove('open')}
+function maybeShow(){const today=localISO();if(localStorage.getItem(SEEN_KEY)!==today){localStorage.setItem(SEEN_KEY,today);setTimeout(()=>openBriefing(),2300)}}
+document.getElementById('briefing').addEventListener('click',e=>{if(e.target===e.currentTarget)closeBriefing()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeBriefing()});window.addEventListener('load',maybeShow);
+</script>
+</body>
+</html>
